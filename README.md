@@ -1,1 +1,1 @@
-# GameofYouThrone
+# GameofYouThrones
