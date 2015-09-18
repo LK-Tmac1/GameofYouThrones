@@ -84,7 +84,6 @@ to manipulate the database
 """
 def select(dbname, tbname, targetcolumns=None, keycolums=None, keyvalues_list=None):
 	query = select_statement(dbname, tbname, targetcolumns, keycolums)
-	print query
 	result_list = []
 	with con:
 		cursor = con.cursor()

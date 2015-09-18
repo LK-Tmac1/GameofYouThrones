@@ -6,6 +6,7 @@ DB_PASSWD = ''
 DB_NAME = "insight"
 DB_TB_CHANNEL_CATEGORY = "tb_channel_category"
 DB_TB_CHANNEL = 'tb_channel'
+DB_TB_PLAYLIST = 'tb_playlist'
 
 # API parameter
 API_HOME = "https://www.googleapis.com/youtube/v3/"

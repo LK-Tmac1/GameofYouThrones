@@ -14,7 +14,7 @@ def getJSONData(resource, Filter, part="id", maxResults=False, pageToken=None):
         requestURL = requestURL + "&maxResults=50"
     if pageToken is not None:
         requestURL = requestURL + "&pageToken=" + pageToken
-    print requestURL
+#    print requestURL
     req = requests.get(requestURL)
     data = json.loads(req.text)
     if 'error' not in data:
@@ -28,5 +28,13 @@ def getDataCount(resource, Filter):
         return data["pageInfo"]["totalResults"]
     else:
         return 0
-    
-print "Hellow"
+
+def dic_look_up(dic, key):
+    if isinstance(dic, dict):
+        if key in dic:
+            return dic[key]
+        for k, v in dic.items():
+            if isinstance(v, dict):
+                return dic_look_up(v, key)
+            
+

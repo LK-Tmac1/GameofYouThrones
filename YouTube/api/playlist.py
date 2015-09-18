@@ -21,8 +21,28 @@ def parsePlaylistJSON(JSONData, channelId):
     return playlistList
 
 def savePlaylistByChannel(channelId):
-    Filter="channelId="+channelId
-    part="id,snippet"
-    resource="playlists"
+    Filter = "channelId=" + channelId
+    part = "id,snippet"
+    resource = "playlists"
     count = getDataCount(resource, Filter)
+    print "----------------", count, "playlist data of channel", channelId
+    if count > 0:
+        data = getJSONData(resource, Filter, part, True)
+        playlistList = parsePlaylistJSON(data, channelId)
+        insert(DB_NAME, DB_TB_PLAYLIST, playlistList)
+        while count > MAX_RESULT:
+            nextPageToken = data["nextPageToken"]
+            data = getJSONData(resource, Filter, part, True , nextPageToken)
+            channelList = parsePlaylistJSON(data, channelId)
+            insert(DB_NAME, DB_TB_PLAYLIST, channelList)
+            count = count - MAX_RESULT
+    update(DB_NAME, DB_TB_CHANNEL, ['playlistFlag'], ['id'], [{'playlistFlag':'Y', 'id':channelId}])
 
+def saveAllPlaylistByChannel():
+    idList = select(DB_NAME, DB_TB_CHANNEL, ["id"], ['playlistFlag'], [{'playlistFlag':'N'}])
+    for ID in idList:
+        savePlaylistByChannel(ID[0])
+
+
+saveAllPlaylistByChannel()
+print "~~~~~~~~~~~~~~~~~"
