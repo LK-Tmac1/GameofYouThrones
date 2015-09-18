@@ -6,26 +6,29 @@ Created on Sep 17, 2015
 from client import *
 from db.mysqldao import *
 
-def parseVideoId(url):
-    url=url[0:url.rfind("/")]
-    url=url[url.rfind("/")+1:len(url)]
-    return url
-    
-def parsePlaylistJSON(JSONData, channelId):
-    # Return a list of channel key-value pair
-    playlistList = []
+def parseVideoJSON(JSONData):
+    # Return a list of video key-value pair
+    videoList = []
     if "items" in JSONData:
         for item in JSONData["items"]:
-            snippet=item["snippet"]
-            playlistDict = {
+            snippet=item['snippet']
+            stat=item['statistics']
+            videoDict = {
             "id":item["id"], "title":snippet["title"],
             "publishedat":snippet["publishedAt"],
             "description":snippet["description"],
             "channelid":snippet["channelId"],
-            "defaultvideoid":parseVideoId(snippet["thumbnails"]["default"]["url"])
+            "imageurl":snippet['thumbnails']['default'],
+            "tags":snippet['tags'],
+            'categoryId':snippet['categoryId'],
+            'viewcount':stat['viewCount'],
+            'likecount':stat['likeCount'],
+            'dislikecount':stat['dislikeCount'],
+            'favoritecount':stat['favoriteCount'],
+            'commentcount':stat['commentCount']
             }
-            playlistList.append(playlistDict)
-    return playlistList
+            videoList.append(videoDict)
+    return videoList
 
 def savePlaylistByChannel(channelId):
     Filter = "channelId=" + channelId
@@ -40,8 +43,8 @@ def savePlaylistByChannel(channelId):
         while count > MAX_RESULT:
             nextPageToken = data["nextPageToken"]
             data = getJSONData(resource, Filter, part, True , nextPageToken)
-            playlistList = parsePlaylistJSON(data, channelId)
-            insert(DB_NAME, DB_TB_PLAYLIST, playlistList)
+            channelList = parsePlaylistJSON(data, channelId)
+            insert(DB_NAME, DB_TB_PLAYLIST, channelList)
             count = count - MAX_RESULT
     update(DB_NAME, DB_TB_CHANNEL, ['playlistFlag'], ['id'], [{'playlistFlag':'Y', 'id':channelId}])
 
@@ -53,5 +56,3 @@ def saveAllPlaylistByChannel():
 
 saveAllPlaylistByChannel()
 print "~~~~~~~~~~~~~~~~~"
-
-
