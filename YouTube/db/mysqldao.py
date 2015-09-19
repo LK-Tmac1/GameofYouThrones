@@ -3,9 +3,8 @@ Please ensure that MySQL has been installed or can be connected,
 and Python for MySQL module installed successfully before running
 this code.
 """
-from general.environment import *
+from utility.environment import *
 import MySQLdb as mdb
-import sys
 
 """
 Configure database connection parameters
@@ -39,7 +38,6 @@ keycolums=the columns used under WHERE conditions
 """
 def select_statement(dbname, tbname, targetcolumns=None, keycolums=None):
 	select_statement = "SELECT "
-	init_length = len(select_statement)
 	column_list = column_names(dbname, tbname)
 	if targetcolumns == None or len(targetcolumns) == 0:
 		select_statement += "*"
@@ -63,7 +61,7 @@ def execute_query(query, query_parameters=()):
 			cursor = con.cursor()
 		cursor.execute(query, query_parameters)
 		con.commit()
-		for i in range(cursor.rowcount):
+		for i in xrange(cursor.rowcount):
 			result_list.append(cursor.fetchone())
 	except:
 		print "=======Exception for", query
@@ -89,20 +87,21 @@ def select(dbname, tbname, targetcolumns=None, keycolums=None, keyvalues_list=No
 		cursor = con.cursor()
 	if keyvalues_list == None:
 		cursor.execute(query)
-		for i in range(cursor.rowcount):
+		for i in xrange(cursor.rowcount):
 			result_list.append(cursor.fetchone())
 		return result_list
 	column_list = []
-	for i in range(cursor.rowcount):
+	for i in xrange(cursor.rowcount):
 		column_list.append(cursor.fetchone())
 	for kv_dict in keyvalues_list:
 		v_list = []
 		for key in keycolums:
 			v_list.append(kv_dict[key])
 		query_parameters = tuple(v_list)
+		print query
 		cursor.execute(query, query_parameters)
 		con.commit()
-		for i in range(cursor.rowcount):
+		for i in xrange(cursor.rowcount):
 			result_list.append(cursor.fetchone())
 	# con.close()
 	return result_list
@@ -194,7 +193,7 @@ def insert(dbname, tbname, data_entry):
 		query_parameters = tuple(data_list)
 		try:
 		# if True:
-			cursor.execute(query, query_parameters)
+			cursor.execute(query, query_parameters)  # @UndefinedVariable
 			con.commit()
 		except:
 		# else:

@@ -3,8 +3,7 @@ Created on Sep 17, 2015
 
 @author: Kun
 '''
-from general.environment import *
-from db.mysqldao import *
+from utility.environment import *
 import requests
 import json
 
@@ -14,7 +13,7 @@ def getJSONData(resource, Filter, part="id", maxResults=False, pageToken=None):
         requestURL = requestURL + "&maxResults=50"
     if pageToken is not None:
         requestURL = requestURL + "&pageToken=" + pageToken
-#    print requestURL
+    print requestURL
     req = requests.get(requestURL)
     data = json.loads(req.text)
     if 'error' not in data:
@@ -23,18 +22,15 @@ def getJSONData(resource, Filter, part="id", maxResults=False, pageToken=None):
 
 def getDataCount(resource, Filter):
     data = getJSONData(resource, Filter)
-    print data
+    # print data
     if data is not None:
         return data["pageInfo"]["totalResults"]
     else:
         return 0
-
-def dic_look_up(dic, key):
-    if isinstance(dic, dict):
-        if key in dic:
-            return dic[key]
-        for k, v in dic.items():
-            if isinstance(v, dict):
-                return dic_look_up(v, key)
             
-
+def parseListToString(strList):
+    if strList is not None:
+        for i in xrange(0, len(strList)):
+            strList[i] = strList[i].encode('utf-8')
+        return ','.join(strList)
+    

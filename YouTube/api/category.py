@@ -6,14 +6,16 @@ Created on Sep 17, 2015
 from client import *
 from db.mysqldao import *
 
-# print getDataCount("channels", Filter="categoryId=GCTXVzaWM", True)
 def saveAllCategory():
     catMap = getAllCategoryMap()
     dataMapList = []
     for key in catMap:
-        dataMapList.append({"id":key.encode('utf-8'), "title":catMap[key].encode('utf-8')})
-    print dataMapList
-    insert(DB_NAME, DB_TB_CHANNEL_CATEGORY, dataMapList)
+        catDict = {"id":key.encode('utf-8'),
+                   "title":catMap[key].encode('utf-8'),
+                   "channelFlag":'N',
+                   "mostPopVideoFlag":"N"}
+        dataMapList.append(catDict)
+    insert(DB_NAME, DB_TB_CATEGORY, dataMapList)
     
 def getAllCategoryMap():
     data = getJSONData("guideCategories", "regionCode=US", "snippet")

@@ -3,8 +3,8 @@ Created on Sep 17, 2015
 
 @author: Kun
 '''
-from client import *
-from db.mysqldao import *
+from client import getJSONData
+from db.mysqldao import insert, select, update, DB_NAME, DB_TB_CHANNEL, DB_TB_CATEGORY
 
 def parseChannelJSON(JSONData, categoryId):
     # Return a list of channel key-value pair
@@ -24,36 +24,32 @@ def parseChannelJSON(JSONData, categoryId):
             "playlistFlag":'N' }
             if 'publishedAt' not in snippet:
                 snippet["publishedAt"] = "null"
-            channelDict["publishedat"]=snippet["publishedAt"]
+            channelDict["publishedat"] = snippet["publishedAt"]
             channelList.append(channelDict)
     return channelList  
     
 def saveChannelByCategory(categoryId):
-    categoryId=str(categoryId)
+    categoryId = str(categoryId)
     Filter = "categoryId=" + categoryId
     part = "id,snippet,statistics"
     resource = "channels"
-    count = getDataCount(resource, Filter)
-    print "----------------", count, "channel data of category", categoryId
-    if count > 0:
-        data = getJSONData(resource, Filter, part, True)
+    data = getJSONData(resource, Filter, part, True)
+    while data is not None:
         channelList = parseChannelJSON(data, categoryId)
         insert(DB_NAME, DB_TB_CHANNEL, channelList)
-        while count > MAX_RESULT:
+        if 'nextPageToken' in data:
             nextPageToken = data["nextPageToken"]
             data = getJSONData(resource, Filter, part, True , nextPageToken)
-            channelList = parseChannelJSON(data, categoryId)
-            insert(DB_NAME, DB_TB_CHANNEL, channelList)
-            count = count - MAX_RESULT
-            print "====", count
-    update(DB_NAME, DB_TB_CHANNEL_CATEGORY, ['channelFlag'], ['id'], [{'channelFlag':'Y', 'id':str(categoryId)}])
+        else:
+            break
+    update(DB_NAME, DB_TB_CATEGORY, ['channelFlag'], ['id'], [{'channelFlag':'Y', 'id':str(categoryId)}])
             
 def saveAllChannelByCategory():
-    idList = select(DB_NAME, DB_TB_CHANNEL_CATEGORY, ["id"], ['channelFlag'], [{'channelFlag':'N'}])
+    idList = select(DB_NAME, DB_TB_CATEGORY, ["id"], ['channelFlag'], [{'channelFlag':'N'}])
     for ID in idList:
         saveChannelByCategory(ID[0])
 
 
-#saveAllChannelByCategory()
+# saveAllChannelByCategory()
 print "~~~~~~~~~~~~~~~~~"
 
