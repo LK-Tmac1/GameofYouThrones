@@ -83,12 +83,12 @@ def saveVideoByPlaylistDefault():
                 videoIdList.append(idList[j][1])
                 playlistIdList.append({'videoflag':'Y', 'id':idList[j][0]})
             start = end
-            end = end + count
+            end = end + count   
             videolist = videolist + getVideoByIdList(videoIdList)
             batch = batch - 1
         insert(DB_NAME, DB_TB_VIDEO, videolist)
         update(DB_NAME, DB_TB_PLAYLIST, ['videoflag'], ['id'], playlistIdList)
-        batch = 10
+        batch = 20
         print "----------start=", start, "end=", end, "total=", len(idList)
 
 saveVideoByPlaylistDefault()
