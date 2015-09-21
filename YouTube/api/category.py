@@ -3,8 +3,8 @@ Created on Sep 17, 2015
 
 @author: Kun
 '''
-from client import *
-from db.mysqldao import *
+from client import getJSONData
+from db.mysqldao import DB_NAME, DB_TB_CATEGORY, insert
 
 def saveAllCategory():
     catMap = getAllCategoryMap()

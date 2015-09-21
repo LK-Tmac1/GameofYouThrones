@@ -3,7 +3,7 @@ Created on Sep 17, 2015
 
 @author: Kun
 '''
-from utility.environment import *
+from utility.environment import API_HOME, API_KEY
 import requests
 import json
 
@@ -28,9 +28,5 @@ def getDataCount(resource, Filter):
     else:
         return 0
             
-def parseListToString(strList):
-    if strList is not None:
-        for i in xrange(0, len(strList)):
-            strList[i] = strList[i].encode('utf-8')
-        return ','.join(strList)
+
     

@@ -3,7 +3,7 @@ Please ensure that MySQL has been installed or can be connected,
 and Python for MySQL module installed successfully before running
 this code.
 """
-from utility.environment import *
+from utility.environment import DB_HOST, DB_USER, DB_PASSWD
 import MySQLdb as mdb
 
 """

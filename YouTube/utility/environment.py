@@ -11,7 +11,7 @@ DB_TB_VIDEO = 'video'
 
 # API parameter
 API_HOME = "https://www.googleapis.com/youtube/v3/"
-API_KEY = ""
+API_KEY = "AIzaSyAD4GzwWB16ilVKfsDymCfaZBodtUzA7-Y"
 MAX_RESULT = 50
 # Log purposes
 URL = ''

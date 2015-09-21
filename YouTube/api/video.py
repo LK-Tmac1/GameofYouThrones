@@ -3,38 +3,12 @@ Created on Sep 17, 2015
 
 @author: Kun
 '''
-from client import getJSONData, parseListToString
-from db.mysqldao import *
-from utility.environment import DB_TB_PLAYLIST, DB_TB_VIDEO
+from client import getJSONData
+from db.mysqldao import insert, update, execute_query
+from utility.environment import DB_TB_VIDEO, MAX_RESULT, DB_TB_PLAYLIST, DB_NAME
+from utility.helper import getDateRangeList
+from utility.parser import parseVideoJSON
 
-def parseVideoJSON(JSONData):
-    # Return a list of video key-value pair
-    videoList = []
-    if "items" in JSONData:
-        for item in JSONData["items"]:
-            if 'statistics' in item:
-                # Otherwise this video is unavailable
-                stat = item['statistics']
-                snippet = item['snippet']
-                videoDict = {
-                "id":item["id"], "title":snippet["title"],
-                "publishedat":snippet["publishedAt"],
-                "description":snippet["description"],
-                "channelid":snippet["channelId"],
-                "imageurl":snippet['thumbnails']['default']['url'],
-                'categoryid':snippet['categoryId'],
-                'viewcount':stat['viewCount'],
-                'likecount':stat['likeCount'],
-                'dislikecount':stat['dislikeCount'],
-                'favoritecount':stat['favoriteCount'],
-                'commentcount':stat['commentCount'],
-                'duration':item['contentDetails']['duration'],
-                'definition':item['contentDetails']['definition']}
-                videoDict['tags'] = ''
-                if 'tags' in snippet:
-                    videoDict['tags'] = parseListToString(snippet['tags'])
-                videoList.append(videoDict)
-    return videoList
 
 def saveVideoByMostPopCategory():
     categoryIdList = range(0, 50)
@@ -52,8 +26,7 @@ def saveVideoByMostPopCategory():
                 data = getJSONData(resource, Filter, part, True , nextPageToken)
             else:
                 data = None
-
-            
+      
 def getVideoByIdList(videoIdList):
     part = "id,snippet,statistics,contentDetails"
     resource = "videos"
@@ -64,32 +37,33 @@ def getVideoByIdList(videoIdList):
     if data is not None:
         return parseVideoJSON(data)
     
-    
 def saveVideoByPlaylistDefault():
-    # idList = select(DB_NAME, DB_TB_PLAYLIST, ["id", "defaultVideoId"], ['videoFlag'], [{'videoFlag':'N'}])
-    query = "select id, defaultvideoid from " + DB_NAME + "." + DB_TB_PLAYLIST + " where videoflag = 'N'"
-    print query
-    idList = execute_query(query)
+    idList = execute_query("select id, defaultvideoid from " + 
+                           DB_NAME + "." + DB_TB_PLAYLIST + 
+                           " where videoflag = 'N'")
     start = 0
-    count = 50
-    end = start + count
+    count = 0
     while start < len(idList):
         playlistIdList = []
         videoIdList = []
         videolist = []
-        batch = 20
-        while batch > 0 and start < len(idList):
-            for j in xrange(start, end):
+        for i in xrange(0, 20):
+            for j in xrange(start, start + MAX_RESULT):
                 videoIdList.append(idList[j][1])
                 playlistIdList.append({'videoflag':'Y', 'id':idList[j][0]})
-            start = end
-            end = end + count   
+                count = count + 1
+                if count > len(idList):
+                    break
             videolist = videolist + getVideoByIdList(videoIdList)
-            batch = batch - 1
         insert(DB_NAME, DB_TB_VIDEO, videolist)
         update(DB_NAME, DB_TB_PLAYLIST, ['videoflag'], ['id'], playlistIdList)
-        batch = 20
-        print "----------start=", start, "end=", end, "total=", len(idList)
+        print "----------start=", start, "total=", len(idList)
+
+def saveVideoByChannelDateRange(channelId, dateStr1, dateStr2):
+    dList = getDateRangeList(dateStr1, dateStr2)
+    
+        
+    return
 
 saveVideoByPlaylistDefault()
 print "~~~~~~~~~~~~~~~~~"

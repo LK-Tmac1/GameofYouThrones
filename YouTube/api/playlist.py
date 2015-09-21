@@ -3,31 +3,11 @@ Created on Sep 17, 2015
 
 @author: Kun
 '''
-from client import *
-from db.mysqldao import *
+from client import getJSONData
+from utility.parser import parsePlaylistJSON
+from utility.environment import DB_NAME, DB_TB_CHANNEL, DB_TB_PLAYLIST
+from db.mysqldao import update, insert, select
 
-def parseVideoId(url):
-    url = url[0:url.rfind("/")]
-    url = url[url.rfind("/") + 1:len(url)]
-    return url
-    
-def parsePlaylistJSON(JSONData, channelId):
-    # Return a list of channel key-value pair
-    playlistList = []
-    if JSONData is not None and "items" in JSONData:
-        for item in JSONData["items"]:
-            snippet = item["snippet"]
-            playlistDict = {
-            "id":item["id"], "title":snippet["title"],
-            "publishedat":snippet["publishedAt"],
-            "description":snippet["description"],
-            "channelid":channelId,
-            "defaultvideoid":parseVideoId(snippet["thumbnails"]["default"]["url"]),
-            'videoflag':'N'
-            }
-            if playlistDict['defaultvideoid'] != 'img':
-                playlistList.append(playlistDict)
-    return playlistList
 
 def savePlaylistByChannel(channelId):
     Filter = "channelId=" + channelId
@@ -48,7 +28,3 @@ def saveAllPlaylistByChannel():
     idList = select(DB_NAME, DB_TB_CHANNEL, ["id"], ['playlistFlag'], [{'playlistFlag':'N'}])
     for ID in idList:
         savePlaylistByChannel(ID[0])
-        
-
-saveAllPlaylistByChannel()
-print "~~~~~~~~~~~~~~~~~"
