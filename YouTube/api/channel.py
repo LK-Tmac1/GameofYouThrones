@@ -4,8 +4,9 @@ Created on Sep 17, 2015
 @author: Kun
 '''
 from client import getJSONData
-from db.mysqldao import insert, select, update, DB_NAME, DB_TB_CHANNEL, DB_TB_CATEGORY
+from utility.environment import  DB_NAME, DB_TB_CHANNEL, DB_TB_CATEGORY
 from utility.parser import parseChannelJSON
+from db.mysqldao import insert, select, update
  
     
 def saveChannelByCategory(categoryId):

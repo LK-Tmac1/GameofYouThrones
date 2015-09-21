@@ -2,7 +2,7 @@
 General helper functions.
 @author: Kun
 '''
-from datetime import date, timedelta as td
+from datetime import date, datetime, timedelta as td
 
 def parseDateString(dateStr):
     # Should be in the format of "2008-10-13T12:00:02.0Z"
@@ -35,3 +35,7 @@ def parseListToString(strList):
         for i in xrange(0, len(strList)):
             strList[i] = strList[i].encode('utf-8')
         return ','.join(strList)
+    
+def getTimestampNow():
+    strTimestamp = str(datetime.now()).replace(' ', 'T')
+    return strTimestamp[0:strTimestamp.rfind(".")] + "Z"

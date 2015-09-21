@@ -4,7 +4,8 @@ Created on Sep 17, 2015
 @author: Kun
 '''
 from client import getJSONData
-from db.mysqldao import DB_NAME, DB_TB_CATEGORY, insert
+from db.mysqldao import insert
+from utility.environment import DB_NAME, DB_TB_CATEGORY
 
 def saveAllCategory():
     catMap = getAllCategoryMap()

@@ -4,66 +4,47 @@ Created on Sep 17, 2015
 @author: Kun
 '''
 from client import getJSONData
-from db.mysqldao import insert, update, execute_query
-from utility.environment import DB_TB_VIDEO, MAX_RESULT, DB_TB_PLAYLIST, DB_NAME
-from utility.helper import getDateRangeList
-from utility.parser import parseVideoJSON
+from db.mysqldao import update, execute_query, select
+from utility.environment import DB_TB_VIDEO, DB_NAME, DB_TB_CHANNEL
+from utility.helper import getDateRangeList, getTimestampNow, parseDateString
+from utility.parser import parseVideoIdByActivityJSON
 
-
-def saveVideoByMostPopCategory():
-    categoryIdList = range(0, 50)
-    for categoryId in categoryIdList:
-        part = "id,snippet,statistics,contentDetails"
-        resource = "videos"
-        Filter = "chart=mostPopular&videoCategoryId=" + str(categoryId)
-        data = getJSONData(resource, Filter, part, True)
+def getVIdByChannelActivity(channelId, dateStr1, dateStr2):
+    dList = getDateRangeList(dateStr1, dateStr2)
+    timestamp = "T00:00:0Z"
+    resource = "activities"
+    part = "contentDetails"
+    Filter = "channelId=" + channelId
+    vIdList = []
+    for i in xrange(0, len(dList) - 1):
+        dateFilter = "&publishedAfter" + dList[i] + timestamp + "&publishedBefore" + dList[i + 1] + timestamp
+        data = getJSONData(resource, Filter + dateFilter, part, True)
         while data is not None:
-            videolist = parseVideoJSON(data)
-            print videolist
-            insert(DB_NAME, DB_TB_VIDEO, videolist)
+            vIdList = vIdList + parseVideoIdByActivityJSON(data)
             if 'nextPageToken' in data:
                 nextPageToken = data["nextPageToken"]
                 data = getJSONData(resource, Filter, part, True , nextPageToken)
-            else:
-                data = None
-      
-def getVideoByIdList(videoIdList):
-    part = "id,snippet,statistics,contentDetails"
-    resource = "videos"
-    if len(videoIdList) > 50:
-        videoIdList = videoIdList[0:50]
-    Filter = "id=" + ','.join(videoIdList)
-    data = getJSONData(resource, Filter, part, True)
-    if data is not None:
-        return parseVideoJSON(data)
-    
-def saveVideoByPlaylistDefault():
-    idList = execute_query("select id, defaultvideoid from " + 
-                           DB_NAME + "." + DB_TB_PLAYLIST + 
-                           " where videoflag = 'N'")
-    start = 0
-    count = 0
-    while start < len(idList):
-        playlistIdList = []
-        videoIdList = []
-        videolist = []
-        for i in xrange(0, 20):
-            for j in xrange(start, start + MAX_RESULT):
-                videoIdList.append(idList[j][1])
-                playlistIdList.append({'videoflag':'Y', 'id':idList[j][0]})
-                count = count + 1
-                if count > len(idList):
-                    break
-            videolist = videolist + getVideoByIdList(videoIdList)
-        insert(DB_NAME, DB_TB_VIDEO, videolist)
-        update(DB_NAME, DB_TB_PLAYLIST, ['videoflag'], ['id'], playlistIdList)
-        print "----------start=", start, "total=", len(idList)
+                vIdList = vIdList + parseVideoIdByActivityJSON(data)
+    return vIdList
 
-def saveVideoByChannelDateRange(channelId, dateStr1, dateStr2):
-    dList = getDateRangeList(dateStr1, dateStr2)
+def saveVIdByChannelActivity(channelId, ALL=False):
+    dateStr1 = "activityDate"
+    if ALL:
+        dateStr1 = "publishedAt"
+    channel = select(DB_NAME, DB_TB_CHANNEL, [dateStr1], ['id'], [{'id':'channelId'}])
+    if len(channel) > 0:
+        dateStr1 = parseDateString(channel[0][0])
+    else:
+        dateStr1 = "2005-02-14T00:00:0Z"
+    idList = getVIdByChannelActivity(channelId, dateStr1, getTimestampNow())
+    insertQ = "insert into " + DB_NAME + "." + DB_TB_VIDEO + " (id) values "
+    for i in xrange(0, len(idList) - 1):
+        insertQ = insertQ + "(" + idList[i] + "),"
+    insertQ = insertQ + "(" + idList[len(idList) - 1] + ");"
+    execute_query(insertQ)
+    update(DB_NAME, DB_TB_CHANNEL, ['activityDate'], ['id'], [{'id':channelId, 'activityDate':getTimestampNow()}])
     
-        
-    return
-
-saveVideoByPlaylistDefault()
-print "~~~~~~~~~~~~~~~~~"
+def saveVIdByAllChannel():
+    channelList = select(DB_NAME, DB_TB_CHANNEL, ["id"])
+    for ID in channelList:
+        saveVIdByChannelActivity(ID[0])

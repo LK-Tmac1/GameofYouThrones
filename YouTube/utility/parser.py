@@ -72,3 +72,13 @@ def parsePlaylistJSON(JSONData, channelId):
             if playlistDict['defaultvideoid'] != 'img':
                 playlistList.append(playlistDict)
     return playlistList
+
+def parseVideoIdByActivityJSON(JSONData):
+    VIdList = []
+    if JSONData is not None and "items" in JSONData:
+        for item in JSONData["items"]:
+            ID = item["contentDetails"]["uploads"]["videoId"].encode('utf-8')
+            VIdList.append(ID)
+    return VIdList
+            
+            
