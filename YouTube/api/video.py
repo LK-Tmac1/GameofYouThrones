@@ -21,12 +21,11 @@ def getVIdByChannelActivity(channelId, dateStr1, dateStr2):
         dateFilter = "&publishedAfter" + dList[i] + timestamp + "&publishedBefore" + dList[i + 1] + timestamp
         data = getJSONData(resource, Filter + dateFilter, part, True)
         while data is not None:
-            idList = parseVideoIdByActivityJSON(data)
-            vIdSet = vIdSet.union(set(idList))
+            parseVideoIdByActivityJSON(data, vIdSet)
             if 'nextPageToken' in data:
                 nextPageToken = data["nextPageToken"]
                 data = getJSONData(resource, Filter, part, True , nextPageToken)
-                vIdSet = vIdSet.union(set(parseVideoIdByActivityJSON(data)))
+                parseVideoIdByActivityJSON(data, vIdSet)
             else:
                 break
     return vIdSet
@@ -41,10 +40,10 @@ def saveVIdByChannelActivity(channelId, ALL=False):
             dateStr = channel[0][1]
         idSet = set(getVIdByChannelActivity(channelId, dateStr, getTimestampNow()))
         if len(idSet) > 0:
-            insertQ = "insert into " + DB_NAME + "." + DB_TB_VIDEO + " (id) values "
+            insertQ = "insert into " + DB_NAME + "." + DB_TB_VIDEO + " (id, channelid) values "
             for i in xrange(0, len(idSet) - 1):
-                insertQ = insertQ + "('" + idSet.pop() + "'),"
-            insertQ = insertQ + "('" + idSet.pop() + "');"
+                insertQ = insertQ + "('" + idSet.pop() + "','" + channelId + "'),"
+            insertQ = insertQ + "('" + idSet.pop() + "','" + channelId + "');"
             print insertQ
             execute_query(insertQ)
         update(DB_NAME, DB_TB_CHANNEL, ['activityDate'], ['id'], [{'id':channelId, 'activityDate':getTimestampNow()}])
@@ -54,5 +53,5 @@ def saveVIdByAllChannel():
     for ID in channelList:
         saveVIdByChannelActivity(ID[0])
 
-print saveVIdByChannelActivity('UCivQRRN7GPy0rqoRiobx9Sw')
+saveVIdByChannelActivity('UCivQRRN7GPy0rqoRiobx9Sw', True)
 # UCxOuw7Mt_5drSKdyjh7R07w
