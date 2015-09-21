@@ -6,12 +6,12 @@ Created on Sep 17, 2015
 from client import getJSONData
 from db.mysqldao import update, execute_query, select
 from utility.environment import DB_TB_VIDEO, DB_NAME, DB_TB_CHANNEL
-from utility.helper import getDateRangeList, getTimestampNow, parseDateString
+from utility.helper import getDateRangeList, getTimestampNow
 from utility.parser import parseVideoIdByActivityJSON
 
 def getVIdByChannelActivity(channelId, dateStr1, dateStr2):
     # Return a set of video id during a activity time span
-    dList = getDateRangeList(dateStr1, dateStr2)
+    dList = getDateRangeList(dateStr1, dateStr2, offset=30)
     timestamp = "T00:00:0Z"
     resource = "activities"
     part = "contentDetails"
@@ -28,6 +28,7 @@ def getVIdByChannelActivity(channelId, dateStr1, dateStr2):
                 parseVideoIdByActivityJSON(data, vIdSet)
             else:
                 break
+        print "========", dList[i], "  ", dList[i + 1], " size=", len(vIdSet)
     return vIdSet
 
 def saveVIdByChannelActivity(channelId, ALL=False):
@@ -49,9 +50,14 @@ def saveVIdByChannelActivity(channelId, ALL=False):
         update(DB_NAME, DB_TB_CHANNEL, ['activityDate'], ['id'], [{'id':channelId, 'activityDate':getTimestampNow()}])
         
 def saveVIdByAllChannel():
-    channelList = select(DB_NAME, DB_TB_CHANNEL, ["id"])
-    for ID in channelList:
+    channelList = select(DB_NAME, DB_TB_CHANNEL, ["id"], ['activityDate'], [{'activityDate':''}])
+    # for ID in channelList:
+    if True:
+        ID = channelList[0]
+        print "~~~~~~~Channel ID=", ID[0]
         saveVIdByChannelActivity(ID[0])
 
-saveVIdByChannelActivity('UCivQRRN7GPy0rqoRiobx9Sw', True)
+# saveVIdByChannelActivity('UCivQRRN7GPy0rqoRiobx9Sw', True)
+saveVIdByAllChannel()
+print "============"
 # UCxOuw7Mt_5drSKdyjh7R07w
