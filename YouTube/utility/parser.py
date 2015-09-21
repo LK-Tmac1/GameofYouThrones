@@ -77,8 +77,9 @@ def parseVideoIdByActivityJSON(JSONData):
     VIdList = []
     if JSONData is not None and "items" in JSONData:
         for item in JSONData["items"]:
-            ID = item["contentDetails"]["uploads"]["videoId"].encode('utf-8')
-            VIdList.append(ID)
+            if 'contentDetails' in item and 'upload' in item:
+                ID = item["contentDetails"]["upload"]["videoId"].encode('utf-8')
+                VIdList.append(ID)
     return VIdList
             
             

@@ -1,6 +1,5 @@
 '''
-Created on Sep 17, 2015
-
+API client for retrieving data from YouTube, by resource, part and filter parameters
 @author: Kun
 '''
 from utility.environment import API_HOME, API_KEY
@@ -22,11 +21,9 @@ def getJSONData(resource, Filter, part="id", maxResults=False, pageToken=None):
 
 def getDataCount(resource, Filter):
     data = getJSONData(resource, Filter)
-    # print data
     if data is not None:
         return data["pageInfo"]["totalResults"]
-    else:
-        return 0
+    return 0
             
 
     

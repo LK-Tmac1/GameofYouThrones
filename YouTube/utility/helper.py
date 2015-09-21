@@ -5,7 +5,9 @@ General helper functions.
 from datetime import date, datetime, timedelta as td
 
 def parseDateString(dateStr):
-    # Should be in the format of "2008-10-13T12:00:02.0Z"
+    # Should be in the format of "2015-9-15T12:00:02.0Z"
+    if len(str(dateStr)) < 11:
+        return ''
     year = int(dateStr[0:dateStr.find('-')])
     month = int(dateStr[dateStr.find('-') + 1:dateStr.rfind('-')])
     day = int(dateStr[dateStr.rfind('-') + 1:dateStr.find('T')])
@@ -39,3 +41,4 @@ def parseListToString(strList):
 def getTimestampNow():
     strTimestamp = str(datetime.now()).replace(' ', 'T')
     return strTimestamp[0:strTimestamp.rfind(".")] + "Z"
+
