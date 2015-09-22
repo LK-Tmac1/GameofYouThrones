@@ -1,17 +1,12 @@
-'''
-Created on Sep 17, 2015
-
-@author: Kun
-'''
 from client import getJSONData
 from db.mysqldao import update, execute_query, select
-from utility.environment import DB_TB_VIDEO, DB_NAME, DB_TB_CHANNEL
+from utility.environment import DB_TB_VIDEO, DB_NAME, DB_TB_CHANNEL, DATE_OFFSET
 from utility.helper import getDateRangeList, getTimestampNow
 from utility.parser import parseVideoIdByActivityJSON
 
-def getVIdByChannelActivity(channelId, dateStr1, dateStr2):
+def getVIdByChannelActivityDate(channelId, dateStr1, dateStr2):
     # Return a set of video id during a activity time span
-    dList = getDateRangeList(dateStr1, dateStr2, offset=10)
+    dList = getDateRangeList(dateStr1, dateStr2, offset=DATE_OFFSET)
     timestamp = "T00:00:0Z"
     resource = "activities"
     part = "contentDetails"
@@ -31,7 +26,7 @@ def getVIdByChannelActivity(channelId, dateStr1, dateStr2):
         print "========", dList[i], "  ", dList[i + 1], " size=", len(vIdSet)
     return vIdSet
 
-def saveVIdByChannelActivity(channelId, ALL=False):
+def getVIdByChannelActivity(channelId, ALL=False):
     channel = select(DB_NAME, DB_TB_CHANNEL, ["publishedAt", "activityDate"], ['id'], [{'id':channelId}])
     if len(channel) > 0:
         dateStr = ""
@@ -39,15 +34,19 @@ def saveVIdByChannelActivity(channelId, ALL=False):
             dateStr = channel[0][0]
         else:
             dateStr = channel[0][1]
-        idSet = set(getVIdByChannelActivity(channelId, dateStr, getTimestampNow()))
-        if len(idSet) > 0:
-            insertQ = "insert into " + DB_NAME + "." + DB_TB_VIDEO + " (id, channelid) values "
-            for i in xrange(0, len(idSet) - 1):
-                insertQ = insertQ + "('" + idSet.pop() + "','" + channelId + "'),"
-            insertQ = insertQ + "('" + idSet.pop() + "','" + channelId + "');"
-            print insertQ
-            execute_query(insertQ)
-        update(DB_NAME, DB_TB_CHANNEL, ['activityDate'], ['id'], [{'id':channelId, 'activityDate':getTimestampNow()}])
+        return getVIdByChannelActivityDate(channelId, dateStr, getTimestampNow())
+    return ([])
+
+def saveVIdByChannelActivity(channelId, ALL=False):
+    idSet = getVIdByChannelActivity(channelId, ALL)
+    if len(idSet) > 0:
+        insertQ = "insert into " + DB_NAME + "." + DB_TB_VIDEO + " (id, channelid) values "
+        for i in xrange(0, len(idSet) - 1):
+            insertQ = insertQ + "('" + idSet.pop() + "','" + channelId + "'),"
+        insertQ = insertQ + "('" + idSet.pop() + "','" + channelId + "');"
+        print insertQ
+        execute_query(insertQ)
+    update(DB_NAME, DB_TB_CHANNEL, ['activityDate'], ['id'], [{'id':channelId, 'activityDate':getTimestampNow()}])
         
 def saveVIdByAllChannel():
     channelList = select(DB_NAME, DB_TB_CHANNEL, ["id"], ['activityDate'], [{'activityDate':''}])
@@ -57,7 +56,6 @@ def saveVIdByAllChannel():
         print "~~~~~~~Channel ID=", ID[0]
         saveVIdByChannelActivity(ID[0])
 
-saveVIdByChannelActivity('UCsWpnu6EwIYDvlHoOESpwYg', True)
-#saveVIdByAllChannel()
-print "============"
+# saveVIdByChannelActivity('UCsWpnu6EwIYDvlHoOESpwYg', True)
+# saveVIdByAllChannel()
 # UCxOuw7Mt_5drSKdyjh7R07w
