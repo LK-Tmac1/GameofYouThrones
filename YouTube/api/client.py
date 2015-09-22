@@ -12,7 +12,7 @@ def getJSONData(resource, Filter, part="id", maxResults=False, pageToken=None):
         requestURL = requestURL + "&maxResults=50"
     if pageToken is not None:
         requestURL = requestURL + "&pageToken=" + pageToken
-    #print requestURL
+    print requestURL
     req = requests.get(requestURL)
     data = json.loads(req.text)
     if 'error' not in data:

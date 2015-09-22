@@ -11,7 +11,7 @@ from utility.parser import parseVideoIdByActivityJSON
 
 def getVIdByChannelActivity(channelId, dateStr1, dateStr2):
     # Return a set of video id during a activity time span
-    dList = getDateRangeList(dateStr1, dateStr2, offset=30)
+    dList = getDateRangeList(dateStr1, dateStr2, offset=10)
     timestamp = "T00:00:0Z"
     resource = "activities"
     part = "contentDetails"
@@ -57,7 +57,7 @@ def saveVIdByAllChannel():
         print "~~~~~~~Channel ID=", ID[0]
         saveVIdByChannelActivity(ID[0])
 
-# saveVIdByChannelActivity('UCivQRRN7GPy0rqoRiobx9Sw', True)
-saveVIdByAllChannel()
+saveVIdByChannelActivity('UCsWpnu6EwIYDvlHoOESpwYg', True)
+#saveVIdByAllChannel()
 print "============"
 # UCxOuw7Mt_5drSKdyjh7R07w

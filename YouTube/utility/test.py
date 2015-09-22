@@ -1,18 +1,20 @@
-listDN = [
-"ec2-54-164-77-150.compute-1.amazonaws.com",
-"ec2-54-85-139-12.compute-1.amazonaws.com",
-"ec2-54-88-56-16.compute-1.amazonaws.com",
-"ec2-54-85-19-171.compute-1.amazonaws.com"
-
-]
 
 a = 'cat ~/.ssh/id_rsa.pub | ssh -o "StrictHostKeyChecking no" -i ~/.ssh/*.pem ubuntu@'
 b = " 'cat >> ~/.ssh/authorized_keys'"
 
+
+listDN = [
+"ec2-54-164-77-150.compute-1.amazonaws.com",
+"ec2-54-88-56-16.compute-1.amazonaws.com",
+"ec2-54-85-139-12.compute-1.amazonaws.com",
+"ec2-54-85-19-171.compute-1.amazonaws.com"
+
+]
+
 listIP = [
 "172-31-28-154",
-"172-31-28-155",
 "172-31-28-153",
+"172-31-28-155",
 "172-31-28-156"
 ]
 
@@ -21,7 +23,8 @@ cmd1 = """<property>
    <value>"""
 cmd2 = """:54311</value>
 </property>"""
-
+s = ""
 for i in xrange(0, len(listDN)):
-    print "ip-" + listIP[i]
+    s = s + listDN[i] + ":9092,"
+print s
 
