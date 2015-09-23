@@ -19,6 +19,7 @@ def parseChannelJSON(JSONData, categoryId):
             "subscribercount":stat["subscriberCount"],
             "videocount":stat["videoCount"],
             "categoryid":categoryId,
+            "activityDate":"",
             "playlistFlag":'N' }
             if 'publishedAt' not in snippet:
                 snippet["publishedAt"] = "null"
@@ -66,10 +67,10 @@ def parsePlaylistJSON(JSONData, channelId):
             "publishedat":snippet["publishedAt"],
             "description":snippet["description"],
             "channelid":channelId,
-            "defaultvideoid":parseVIdByImageURL(snippet["thumbnails"]["default"]["url"]),
+            "videoid":parseVIdByImageURL(snippet["thumbnails"]["default"]["url"]),
             'videoflag':'N'
             }
-            if playlistDict['defaultvideoid'] != 'img':
+            if playlistDict['videoid'] != 'img':
                 playlistList.append(playlistDict)
     return playlistList
 

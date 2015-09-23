@@ -1,10 +1,7 @@
-'''
-Created on Sep 17, 2015
+#!/usr/bin/python
 
-@author: Kun
-'''
 from client import getJSONData
-from db.mysqldao import insert
+from mysql.mysqldao import insert
 from utility.environment import DB_NAME, DB_TB_CATEGORY
 
 def saveAllCategory():

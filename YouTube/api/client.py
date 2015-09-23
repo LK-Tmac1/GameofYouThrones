@@ -1,7 +1,5 @@
-'''
-API client for retrieving data from YouTube, by resource, part and filter parameters
-@author: Kun
-'''
+#!/usr/bin/python
+
 from utility.environment import API_HOME, API_KEY
 import requests
 import json
@@ -24,6 +22,3 @@ def getDataCount(resource, Filter):
     if data is not None:
         return data["pageInfo"]["totalResults"]
     return 0
-            
-
-    

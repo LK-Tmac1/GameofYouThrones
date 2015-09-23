@@ -1,7 +1,4 @@
-'''
-General helper functions.
-@author: Kun
-'''
+
 from datetime import date, datetime, timedelta as td
 
 def parseDateString(dateStr):

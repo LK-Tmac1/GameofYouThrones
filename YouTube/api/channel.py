@@ -1,12 +1,9 @@
-'''
-Created on Sep 17, 2015
+#!/usr/bin/python
 
-@author: Kun
-'''
 from client import getJSONData
 from utility.environment import  DB_NAME, DB_TB_CHANNEL, DB_TB_CATEGORY
 from utility.parser import parseChannelJSON
-from db.mysqldao import insert, select, update
+from mysql.mysqldao import insert, select, update, execute_query
  
     
 def saveChannelByCategory(categoryId):
@@ -26,6 +23,7 @@ def saveChannelByCategory(categoryId):
     update(DB_NAME, DB_TB_CATEGORY, ['channelFlag'], ['id'], [{'channelFlag':'Y', 'id':str(categoryId)}])
             
 def saveAllChannelByCategory():
+    #idList = execute_query("select id from " + DB_NAME + "." + DB_TB_CATEGORY + " where channelFlag='N'")
     idList = select(DB_NAME, DB_TB_CATEGORY, ["id"], ['channelFlag'], [{'channelFlag':'N'}])
     for ID in idList:
         saveChannelByCategory(ID[0])

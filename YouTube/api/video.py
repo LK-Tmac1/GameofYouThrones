@@ -1,8 +1,36 @@
+#!/usr/bin/python
+
 from client import getJSONData
-from db.mysqldao import update, execute_query, select
+from mysql.mysqldao import update, execute_query, select, insert
 from utility.environment import DB_TB_VIDEO, DB_NAME, DB_TB_CHANNEL, DATE_OFFSET
 from utility.helper import getDateRangeList, getTimestampNow
-from utility.parser import parseVideoIdByActivityJSON
+from utility.parser import parseVideoIdByActivityJSON, parseVideoJSON
+
+def getVideoByIdList(videoIdList):
+    part = "id,snippet,statistics,contentDetails"
+    resource = "videos"
+    if len(videoIdList) > 50:
+        videoIdList = videoIdList[0:50]
+    Filter = "id=" + ','.join(videoIdList)
+    data = getJSONData(resource, Filter, part, True)
+    if data is not None:
+        return parseVideoJSON(data)
+
+def saveVideoByMostPopCategory():
+    categoryIdList = range(0, 50)
+    for categoryId in categoryIdList:
+        part = "id,snippet,statistics,contentDetails"
+        resource = "videos"
+        Filter = "chart=mostPopular&videoCategoryId=" + str(categoryId)
+        data = getJSONData(resource, Filter, part, True)
+        while data is not None:
+            videolist = parseVideoJSON(data)
+            insert(DB_NAME, DB_TB_VIDEO, videolist)
+            if 'nextPageToken' in data:
+                nextPageToken = data["nextPageToken"]
+                data = getJSONData(resource, Filter, part, True , nextPageToken)
+            else:
+                data = None
 
 def getVIdByChannelActivityDate(channelId, dateStr1, dateStr2):
     # Return a set of video id during a activity time span
@@ -55,8 +83,3 @@ def saveVIdByAllChannel():
         ID = channelList[0]
         print "~~~~~~~Channel ID=", ID[0]
         saveVIdByChannelActivity(ID[0])
-
-#saveVIdByChannelActivity('UCsWpnu6EwIYDvlHoOESpwYg', True)
-# saveVIdByAllChannel()
-# UCxOuw7Mt_5drSKdyjh7R07w
-print "video.py"

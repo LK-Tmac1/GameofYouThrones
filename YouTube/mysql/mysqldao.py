@@ -3,6 +3,9 @@ Please ensure that MySQL has been installed or can be connected,
 and Python for MySQL module installed successfully before running
 this code.
 """
+import sys, os
+sys.path.append(os.getcwd())
+
 from utility.environment import DB_HOST, DB_USER, DB_PASSWD
 import MySQLdb as mdb
 
@@ -54,12 +57,16 @@ def select_statement(dbname, tbname, targetcolumns=None, keycolums=None):
 	return select_statement
 
 def execute_query(query, query_parameters=()):
+	print query
 	result_list = []
 	try:
 	# if True:
 		with con:
 			cursor = con.cursor()
-		cursor.execute(query, query_parameters)
+		if len(query_parameters) > 0:
+			cursor.execute(query, query_parameters)
+		else:
+			cursor.execute(query)
 		con.commit()
 		for i in xrange(cursor.rowcount):
 			result_list.append(cursor.fetchone())
