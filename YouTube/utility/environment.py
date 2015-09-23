@@ -16,4 +16,5 @@ CHANNEL_MINE = "UCxOuw7Mt_5drSKdyjh7R07w"
 DATE_OFFSET = 5
 # AWS EC2
 MasterPublicIP = "54.174.174.113"
-
+# HDFS
+DefaultHDFSDir = "~"
