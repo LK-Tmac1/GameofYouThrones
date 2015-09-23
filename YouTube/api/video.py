@@ -56,6 +56,7 @@ def saveVIdByAllChannel():
         print "~~~~~~~Channel ID=", ID[0]
         saveVIdByChannelActivity(ID[0])
 
-# saveVIdByChannelActivity('UCsWpnu6EwIYDvlHoOESpwYg', True)
+#saveVIdByChannelActivity('UCsWpnu6EwIYDvlHoOESpwYg', True)
 # saveVIdByAllChannel()
 # UCxOuw7Mt_5drSKdyjh7R07w
+print "video.py"

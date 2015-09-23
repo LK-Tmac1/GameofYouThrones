@@ -1,4 +1,6 @@
 # Constant for all parameters
+import os, sys
+sys.path.append(os.getcwd())
 # MySQL
 DB_HOST = "localhost"
 DB_USER = 'root'
@@ -18,3 +20,5 @@ DATE_OFFSET = 5
 MasterPublicIP = "54.174.174.113"
 # HDFS
 DefaultHDFSDir = "~"
+
+

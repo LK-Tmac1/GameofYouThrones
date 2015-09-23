@@ -1,7 +1,7 @@
-
+from environment import API_KEY
 a = 'cat ~/.ssh/id_rsa.pub | ssh -o "StrictHostKeyChecking no" -i ~/.ssh/*.pem ubuntu@'
 b = " 'cat >> ~/.ssh/authorized_keys'"
-
+print API_KEY
 listDN = [
 "ec2-54-174-174-113.compute-1.amazonaws.com",
 "ec2-54-175-136-253.compute-1.amazonaws.com",

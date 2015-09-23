@@ -89,5 +89,3 @@ def parseVideoIdByActivityJSON(JSONData, VIdSet=None):
                 if ID not in VIdSet:
                     VIdSet.add(ID)
     return VIdSet
-            
-            
