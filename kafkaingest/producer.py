@@ -7,7 +7,7 @@ from utility.environment import MasterPublicIP, CHANNEL_MINE, DB_TB_CHANNEL, DB_
 from mysql.mysqldao import select, execute_query
 from api.video import getVIdByChannelActivity, getVideoById
 from utility.helper import parseDateString, getTimestampNow
-from utility.dataengineering import videoStatDaily
+from dataengineering import videoStatDaily
 
 def dataProducer(topic, msg):
     producer = SimpleProducer(KafkaClient(MasterPublicIP + ":9092"))

@@ -16,7 +16,7 @@ CHANNEL_MINE = "UCxOuw7Mt_5drSKdyjh7R07w"
 DATE_OFFSET = 10
 # AWS EC2
 MasterPublicIP = "54.174.174.113"
-PROJECT_PATH = "/home/ubuntu/project/GameofYouThrones/YouTube"
+PROJECT_PATH = "/home/ubuntu/project/GameofYouThrones/"
 SPARK_CMD = """export PYTHONPATH=$SPARK_HOME/python/:$PYTHONPATH
 export PYTHONPATH=$SPARK_HOME/python/lib/py4j-0.8.2.1-src.zip:$PYTHONPATH
 export PYTHONPATH="%s" """ % (PROJECT_PATH)
