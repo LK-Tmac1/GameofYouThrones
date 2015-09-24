@@ -2,19 +2,32 @@
 
 from client import getJSONData
 from mysql.mysqldao import update, execute_query, select, insert
-from utility.environment import DB_TB_VIDEO, DB_NAME, DB_TB_CHANNEL, DATE_OFFSET
+from utility.environment import DB_TB_VIDEO, DB_NAME, DB_TB_CHANNEL, DATE_OFFSET, MAX_RESULT
 from utility.helper import getDateRangeList, getTimestampNow
 from utility.parser import parseVideoIdByActivityJSON, parseVideoJSON
 
-def getVideoByIdList(videoIdList):
+def getVideoById(vIds):
+    vIdList = []
+    videoList = []
+    if isinstance(vIds, (set, list)):
+        vIdList = list(set(vIds))
+    else:
+        vIdList.append(str(vIds))
     part = "id,snippet,statistics,contentDetails"
     resource = "videos"
-    if len(videoIdList) > 50:
-        videoIdList = videoIdList[0:50]
-    Filter = "id=" + ','.join(videoIdList)
+    i = 0
+    print "vIdList=", vIdList
+    while i + MAX_RESULT <= len(vIdList):
+        Filter = "id=" + ','.join(vIdList[i:i + MAX_RESULT])
+        data = getJSONData(resource, Filter, part, True)
+        if data is not None:
+            parseVideoJSON(data, videoList)
+        i = i + MAX_RESULT
+    Filter = "id=" + ','.join(vIdList[i:])
     data = getJSONData(resource, Filter, part, True)
     if data is not None:
-        return parseVideoJSON(data)
+        parseVideoJSON(data, videoList)
+    return videoList   
 
 def saveVideoByMostPopCategory():
     categoryIdList = range(0, 50)

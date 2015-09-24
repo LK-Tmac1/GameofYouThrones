@@ -10,3 +10,10 @@ res = data.collect()
 
 for line in res:
     print line
+
+
+def videoStatDaily():
+    print ""
+    
+def userActivity():
+    print ""

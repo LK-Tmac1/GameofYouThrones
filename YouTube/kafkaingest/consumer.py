@@ -1,9 +1,10 @@
+#!/usr/bin/python
+
 from kafka.client import KafkaClient
 from kafka.consumer import SimpleConsumer
-from utility.environment import MasterPublicIP, DefaultHDFSDir
+from utility.environment import MasterPublicIP
 from utility.helper import parseDateString, getTimestampNow
 import os
-
 def dataConsumer(topic, group, count=1, address=MasterPublicIP + ":9092"):
     kafka_consumer = SimpleConsumer(KafkaClient(address), group, topic)
     messages = kafka_consumer.get_messages(count=count)
@@ -11,7 +12,7 @@ def dataConsumer(topic, group, count=1, address=MasterPublicIP + ":9092"):
         print(message.message.value)
     print "===="
     
-def flush2HDFS(topic, dataSet, dateStr="", outputdir=DefaultHDFSDir):
+def flush2HDFS(topic, dataSet, dateStr="", outputdir=""):
     if dateStr == "" or parseDateString(dateStr) == "":
         dateStr = parseDateString(getTimestampNow())
     else:
@@ -24,7 +25,6 @@ def flush2HDFS(topic, dataSet, dateStr="", outputdir=DefaultHDFSDir):
         tempfile = open(filePath, "w")
         for data in dataSet:
             tempfile.write(data + "\n")
-            
-    
+
 
 dataConsumer("video", "test", 100)

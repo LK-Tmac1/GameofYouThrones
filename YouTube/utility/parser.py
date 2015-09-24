@@ -1,12 +1,9 @@
-'''
-Functions parse JSON data from YouTube client.
-@author: Kun
-'''
+#!/usr/bin/python
+
 from helper import parseListToString, parseVIdByImageURL
 
-def parseChannelJSON(JSONData, categoryId):
+def parseChannelJSON(JSONData, categoryId, channelList=[]):
     # Return a list of channel key-value pair
-    channelList = []
     if "items" in JSONData:
         for item in JSONData["items"]:
             snippet = item["snippet"]
@@ -27,9 +24,9 @@ def parseChannelJSON(JSONData, categoryId):
             channelList.append(channelDict)
     return channelList
 
-def parseVideoJSON(JSONData):
+def parseVideoJSON(JSONData, videoList=[]):
     # Return a list of video key-value pair
-    videoList = []
+    # If videoList is provided, then append new video to it
     if "items" in JSONData:
         for item in JSONData["items"]:
             if 'statistics' in item:
@@ -56,9 +53,8 @@ def parseVideoJSON(JSONData):
                 videoList.append(videoDict)
     return videoList
 
-def parsePlaylistJSON(JSONData, channelId):
+def parsePlaylistJSON(JSONData, channelId, playlistList=[]):
     # Return a list of channel key-value pair
-    playlistList = []
     if JSONData is not None and "items" in JSONData:
         for item in JSONData["items"]:
             snippet = item["snippet"]
@@ -74,10 +70,8 @@ def parsePlaylistJSON(JSONData, channelId):
                 playlistList.append(playlistDict)
     return playlistList
 
-def parseVideoIdByActivityJSON(JSONData, VIdSet=None):
+def parseVideoIdByActivityJSON(JSONData, VIdSet=set([])):
     # Return a set of video id in the JSON data, if such id is not in the VIdSet yet
-    if VIdSet is None:
-        VIdSet = set([])
     if JSONData is not None and "items" in JSONData:
         for item in JSONData['items']:
             if 'contentDetails' in item:
@@ -87,6 +81,6 @@ def parseVideoIdByActivityJSON(JSONData, VIdSet=None):
                     ID = content["upload"]["videoId"]
                 elif 'like' in content:
                     ID = content['like']['resourceId']['videoId']
-                if ID not in VIdSet:
+                if ID != '' and ID not in VIdSet:
                     VIdSet.add(ID)
     return VIdSet

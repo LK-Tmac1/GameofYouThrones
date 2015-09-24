@@ -103,7 +103,7 @@ def select(dbname, tbname, targetcolumns=None, keycolums=None, keyvalues_list=No
 	for kv_dict in keyvalues_list:
 		v_list = []
 		for key in keycolums:
-			v_list.append(kv_dict[key])
+			v_list.append(str(kv_dict[key]).encode('utf-8'))
 		query_parameters = tuple(v_list)
 		print query
 		cursor.execute(query, query_parameters)

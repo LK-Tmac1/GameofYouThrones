@@ -13,7 +13,7 @@ API_HOME = "https://www.googleapis.com/youtube/v3/"
 API_KEY = "AIzaSyAD4GzwWB16ilVKfsDymCfaZBodtUzA7-Y"
 MAX_RESULT = 50
 CHANNEL_MINE = "UCxOuw7Mt_5drSKdyjh7R07w"
-DATE_OFFSET = 5
+DATE_OFFSET = 10
 # AWS EC2
 MasterPublicIP = "54.174.174.113"
 PROJECT_PATH = "/home/ubuntu/project/GameofYouThrones/YouTube"
