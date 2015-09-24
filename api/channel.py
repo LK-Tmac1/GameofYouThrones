@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from client import getJSONData
-from utility.environment import  DB_NAME, DB_TB_CHANNEL, DB_TB_CATEGORY
+from utility.constant import  DB_NAME, DB_TB_CHANNEL, DB_TB_CATEGORY
 from utility.parser import parseChannelJSON
 from mysql.mysqldao import insert, select, update
  

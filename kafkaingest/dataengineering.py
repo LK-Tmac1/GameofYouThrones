@@ -1,9 +1,8 @@
 #!/usr/bin/python
 from random import randint
 from mysql.mysqldao import execute_query, select
-from utility.environment import DB_NAME, DB_TB_VIDEO
+from utility.constant import DB_NAME, DB_TB_VIDEO, TOPIC_USER_VIEW
 from utility.helper import getTimestampNow
-import json
 
 def videoStatDaily():
     view = randint(0, randint(0, 100))
@@ -12,30 +11,33 @@ def videoStatDaily():
     data = {"viewdaily":view, "sharedaily":share, "subscribeDaily":subscb}
     return data
 
-def userActivity(action='', vid='', dateStr='', uid=''):
-    # Sample data {"action": "view", "channelid": "UCiH828EtgQjTyNIMH6YiOSw", "userid": "u_1334125", 
-    # "videoid": "EcbLM6xjVpA", "activitydate": "2015-09-23T22:53:27Z"}
-    data = {}
+def userActivityRandomBatch(topic=TOPIC_USER_VIEW, vid='', dateStr='', uid='', size=1):
+    dataList = {'useractivity':[]}
     video = select(DB_NAME, DB_TB_VIDEO, ['id', 'channelid'], ['id'], [{'id':vid}])
     if len(video) == 0:
-        video = execute_query("SELECT id, channelid FROM" + DB_NAME + "." + DB_TB_VIDEO + \
-                            " ORDER BY RAND() LIMIT 0,1;")
+        video = execute_query("SELECT id, channelid FROM " + DB_NAME + "." + DB_TB_VIDEO + \
+                            " ORDER BY RAND() LIMIT 0," + str(size))
     if len(video) > 0:
-        data['videoid'] = video[0][0]
-        data['channelid'] = video[0][1]
+        for i in xrange(0, len(video)):
+            dataList['useractivity'].append(userActivityRandom(topic, video[i][0], video[i][1], uid, dateStr))
     else:
-        data['videoid'] = "v_" + getTimestampNow() + str(randint(1, 1000))
-        data['channelid'] = "c_" + getTimestampNow() + str(randint(1, 1000))
-    if dateStr == '':
+        for i in xrange(0, size):
+            dataList['useractivity'].append(userActivityRandom(topic, '', '', uid, dateStr))
+    return dataList
+
+def userActivityRandom(topic, vid, cid, uid, dateStr):
+    data = {'videoid':vid, 'userid':uid, 'channelid':cid, \
+            'activitydate':dateStr, 'topic':topic}
+    if data['activitydate'] == '':
         data['activitydate'] = getTimestampNow()
-    if uid == '':
+    if data['userid'] == '':
         data['userid'] = "u_" + str(randint(1, 10000000))
-    if action == '':
-        data['action'] = 'view'
-    else:
-        data['action'] = action
-    return json.dumps(data)
-    
-print userActivity(vid='EcbLM6xjVpA')       
-        
+    if data['topic'] == '':
+        data['topic'] = TOPIC_USER_VIEW
+    if data['videoid'] == '':
+        data['videoid'] = "v_" + str(randint(1, 100000))
+    if data['channelid'] == '':
+        data['channelid'] = "c_" + str(randint(1, 10000))
+    print data
+    return data
     

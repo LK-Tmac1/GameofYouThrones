@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from utility.environment import API_HOME, API_KEY
+from utility.constant import API_HOME, API_KEY
 import requests
 import json
 

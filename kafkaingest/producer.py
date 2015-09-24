@@ -2,12 +2,12 @@
 
 from kafka.client import KafkaClient
 from kafka.producer import SimpleProducer
-from utility.environment import MasterPublicIP, CHANNEL_MINE, DB_TB_CHANNEL, DB_NAME, \
-    DB_TB_VIDEO
+from utility.constant import MasterPublicIP, DB_TB_CHANNEL, DB_NAME, \
+    DB_TB_VIDEO, TOPIC_USER_VIEW
 from mysql.mysqldao import select, execute_query
 from api.video import getVIdByChannelActivity, getVideoById
 from utility.helper import parseDateString, getTimestampNow
-from dataengineering import videoStatDaily
+from dataengineering import videoStatDaily, userActivityRandomBatch
 
 def dataProducer(topic, msg):
     producer = SimpleProducer(KafkaClient(MasterPublicIP + ":9092"))
@@ -41,5 +41,12 @@ def produceVideoStatByDay(videoId, dateStr=''):
         data["statdate"] = dateStr
         dataProducer("videostat", data)
 
-for i in xrange(0, 100000):
-    print produceVideoStatByDay("WYuTmbH9BQI")
+def produceUserActivity(topic=TOPIC_USER_VIEW, videoId='', dateStr='', count=1):
+    # Produce user activity data for a given video on a given date
+    useractivity = userActivityRandomBatch(topic=topic, vid=videoId, dateStr=dateStr, size=count)
+    dataProducer(topic, useractivity)
+
+for x in xrange(0, 1000):
+    produceUserActivity(topic=TOPIC_USER_VIEW, videoId='', count=10)
+print "-----"
+    

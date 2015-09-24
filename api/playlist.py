@@ -2,7 +2,7 @@
 
 from client import getJSONData
 from utility.parser import parsePlaylistJSON
-from utility.environment import DB_NAME, DB_TB_CHANNEL, DB_TB_PLAYLIST, DB_TB_VIDEO, MAX_RESULT
+from utility.constant import DB_NAME, DB_TB_CHANNEL, DB_TB_PLAYLIST, DB_TB_VIDEO, MAX_RESULT
 from mysql.mysqldao import update, insert, select, execute_query
 from video import getVideoByIdList
 

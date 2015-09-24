@@ -1,6 +1,16 @@
 #!/usr/bin/python
 
 from helper import parseListToString, parseVIdByImageURL
+import json
+
+def parseUserActivityJSON(JSONData, uaList=[]):
+    JSONData = json.loads(JSONData)
+    if 'useractivity' in JSONData:
+        for ua in JSONData['useractivity']:
+            data = {'videoid':ua['videoid'], 'userid':ua['userid'], 'channelid':ua['channelid'], \
+            'activitydate':ua['activitydate'], 'topic':ua['topic']}
+            uaList.append(data)
+    return uaList
 
 def parseChannelJSON(JSONData, categoryId, channelList=[]):
     # Return a list of channel key-value pair

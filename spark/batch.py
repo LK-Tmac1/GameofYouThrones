@@ -15,5 +15,5 @@ for line in res:
 def videoStatDaily():
     print ""
     
-def userActivity():
+def userActivityRandomBatch():
     print ""

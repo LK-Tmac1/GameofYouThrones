@@ -6,7 +6,7 @@ this code.
 import sys, os
 sys.path.append(os.getcwd())
 
-from utility.environment import DB_HOST, DB_USER, DB_PASSWD
+from utility.constant import DB_HOST, DB_USER, DB_PASSWD
 import MySQLdb as mdb
 
 """

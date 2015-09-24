@@ -1,7 +1,6 @@
-l = [1, 2, 3, 4, 4, 3, 2, 1]
-s = set("ss")
-print s
-s.add("w")
-print len(s)
-while len(s) > 0:
-    print s.pop()
+from utility.constant import TOPIC_USER_ACTIVITY_LIST
+from random import randint
+for x in range(0, 1000):
+    a = randint(0, len(TOPIC_USER_ACTIVITY_LIST))
+    print a
+print "======="
