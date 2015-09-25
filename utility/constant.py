@@ -1,4 +1,3 @@
-# Constant for all parameters
 # MySQL
 DB_HOST = "localhost"
 DB_USER = 'root'
@@ -16,6 +15,7 @@ CHANNEL_MINE = "UCxOuw7Mt_5drSKdyjh7R07w"
 DATE_OFFSET = 10
 # HDFS
 MasterPublicIP = "54.174.174.113"
+HDFS_MASTER_DNS = "hdfs://ec2-54-174-174-113.compute-1.amazonaws.com:9000"
 HDFS_DEFAULT_PATH = '/data'
 LOCAL_DEFAULT_PATH = "/home/ubuntu/project"
 PROJECT_PATH = LOCAL_DEFAULT_PATH + "/GameofYouThrones"

@@ -1,16 +1,38 @@
 #!/usr/bin/python
 
-from helper import parseListToString, parseVIdByImageURL
-import json
+from helper import transformListToString, parseVIdByImageURL
+import ast
+from utility.helper import parseDateString, parseDateTimeMinute
 
-def parseUserActivityJSON(JSONData, uaList=[]):
-    JSONData = json.loads(JSONData)
+def parseLineToDict(line):
+    if not isinstance(line, dict):
+        line = ast.literal_eval(str(line))
+    return line
+
+def parseActivityAggre(line):
+    activity = parseLineToDict(line)
+    dateKey = str(parseDateString(activity['activitydate']))
+    return dateKey + ":" + activity['videoid'] + ":" + activity['channelid'] + ":" + activity['topic']
+
+def parseActivityMinute(line):
+    activity = parseLineToDict(line)
+    timestamp = parseDateTimeMinute(activity['activitydate'])
+    return timestamp + ":" + activity['videoid'] + ':' + activity['topic']
+
+def parseUserActivityJSON(JSONData):
+    JSONData = ast.literal_eval(JSONData)
+    uaList = []
     if 'useractivity' in JSONData:
         for ua in JSONData['useractivity']:
-            data = {'videoid':ua['videoid'], 'userid':ua['userid'], 'channelid':ua['channelid'], \
-            'activitydate':ua['activitydate'], 'topic':ua['topic']}
-            uaList.append(data)
-    return uaList
+            uaList.append(str(ua))
+    return '\n'.join(uaList)
+
+JSONData = "{'useractivity': [{'topic': 'userview', 'channelid': 'c_8067', 'userid': 'u_1714371', 'videoid': 'v_51796', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_9149', 'userid': 'u_7875945', 'videoid': 'v_16292', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_9921', 'userid': 'u_8813132', 'videoid': 'v_45140', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_3919', 'userid': 'u_3875289', 'videoid': 'v_18414', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_7475', 'userid': 'u_7809244', 'videoid': 'v_76435', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_8711', 'userid': 'u_4706076', 'videoid': 'v_66865', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_1644', 'userid': 'u_3121991', 'videoid': 'v_11385', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_5402', 'userid': 'u_826376', 'videoid': 'v_55557', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_5624', 'userid': 'u_4566523', 'videoid': 'v_55522', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_4721', 'userid': 'u_6786679', 'videoid': 'v_11758', 'activitydate': '2015-09-24T22:53:15Z'}]}"
+lineList = parseUserActivityJSON(JSONData)
+# for line in lineList:
+#    print line
+
+
 
 def parseChannelJSON(JSONData, categoryId, channelList=[]):
     # Return a list of channel key-value pair
@@ -59,7 +81,7 @@ def parseVideoJSON(JSONData, videoList=[]):
                 'definition':item['contentDetails']['definition']}
                 videoDict['tags'] = ''
                 if 'tags' in snippet:
-                    videoDict['tags'] = parseListToString(snippet['tags'])
+                    videoDict['tags'] = transformListToString(snippet['tags'])
                 videoList.append(videoDict)
     return videoList
 

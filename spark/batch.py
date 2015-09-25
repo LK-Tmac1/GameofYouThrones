@@ -1,19 +1,31 @@
+from utility.parser import parseUserActivityJSON
 from pyspark import SparkContext, SparkConf
-import sys, os
-# sys.path.append(os.getcwd())
+from utility.constant import TOPIC_USER_VIEW, HDFS_MASTER_DNS, HDFS_DEFAULT_PATH, FILE_TYPE
+from utility.helper import parseDateString, getTimestampNow
+from utility.parser import parseActivityAggre, parseActivityMinute
 
-print "Testing"
+ 
 conf = SparkConf().setAppName("testBatch")
 sc = SparkContext(conf=conf)
-data = sc.textFile("/home/ubuntu/project/GameofYouThrones/samplefiles/videos.json")
-res = data.collect()
 
-for line in res:
-    print line
-
-
-def videoStatDaily():
-    print ""
+def videoStatDaily(dateStr='', topic=TOPIC_USER_VIEW):
+    dateStr = str(parseDateString(dateStr))
+    if dateStr == '':
+        dateStr = str(parseDateString(getTimestampNow()))
+    #filePath = HDFS_MASTER_DNS + HDFS_DEFAULT_PATH + '/' + topic + '/' + dateStr + FILE_TYPE
+    filePath = 'test.txt'
+    print filePath
+    data = sc.textFile(filePath)
+    print data.collect()
+    #useractivity = data.map(lambda line: parseUserActivityJSON(line))
+    #aggreVideoStat = useractivity.map(lambda line : parseActivityAggre(line)).countByValue()
+    #timeMinuteStat = useractivity.map(lambda line : parseActivityMinute(line)).countByValue()
+    # 2015-09-24:v_51796:c_8067
+    # 2015-09-24T22:53:v_51796:userview
+    print '========'
+    #print aggreVideoStat.collect()
+    print '--------'
+    #print timeMinuteStat.collect()
     
-def userActivityRandomBatch():
-    print ""
+videoStatDaily()
+print "Done"

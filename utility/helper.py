@@ -1,6 +1,12 @@
 
 from datetime import date, datetime, timedelta as td
 
+def parseDateTimeMinute(timestamp):
+    timestamp = str(timestamp)
+    if len(timestamp) < 11:
+        return ''
+    return timestamp[0:timestamp.rfind(':')]
+
 def parseDateString(dateStr):
     # Should be in the format of "2015-9-15T12:00:02.0Z"
     if len(str(dateStr)) < 11:
@@ -31,7 +37,7 @@ def parseVIdByImageURL(url):
     url = url[url.rfind("/") + 1:len(url)]
     return url
 
-def parseListToString(strList):
+def transformListToString(strList):
     # Returns a string that concatenates all objects in a list by comma
     if strList is not None:
         for i in xrange(0, len(strList)):
