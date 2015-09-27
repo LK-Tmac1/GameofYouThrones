@@ -33,7 +33,7 @@ def produceUserActivity(topic=TOPIC_USER_VIEW, videoId='', dateStr='', count=1):
     useractivity = userActivityRandomBatch(topic=topic, vid=videoId, dateStr=dateStr, size=count)
     dataProducer(topic, useractivity)
 
-for x in xrange(0, 1000):
+for x in xrange(0, 10):
     produceUserActivity(topic=TOPIC_USER_VIEW, videoId='', count=100)
 print "-----"
     

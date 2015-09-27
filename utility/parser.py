@@ -1,39 +1,24 @@
 #!/usr/bin/python
 
 from utility.helper import transformListToString, parseVIdByImageURL
-import ast, json
+import ast
 from utility.helper import parseDateString, parseDateTimeMinute
+from utility.constant import DE_DEFAULT_DELIMITER
 
 def parseLineToDict(line):
     if not isinstance(line, dict):
         line = ast.literal_eval(str(line))
     return line
 
-def parseActivityAggre(line):
-    activity = ast.literal_eval(str(line))
-    print "activity: ", activity
-    dateKey = str(parseDateString(activity['activitydate']))
-    return dateKey + ":" + activity['videoid'] + ":" + \
-         activity['channelid'] + ":" + activity['topic']
+def parseActivityDaily(line):
+    itemList = line.split(DE_DEFAULT_DELIMITER)
+    dateKey = str(parseDateString(itemList[0]))
+    return dateKey + ":" + itemList[1] + ":" + itemList[2] + ":" + itemList[3]
 
 def parseActivityMinute(line):
-    activity = parseLineToDict(line)
-    timestamp = parseDateTimeMinute(activity['activitydate'])
-    return timestamp + ":" + activity['videoid'] + ':' + activity['topic']
-
-def parseUserActivityJSON(JSONData):
-    print "~~~~~~~~", JSONData
-    JSONData = ast.literal_eval(str(JSONData))
-    uaList = []
-    if 'useractivity' in JSONData:
-        for ua in JSONData['useractivity']:
-            uaList.append(str(ua))
-    return '\n'.join(uaList)
-
-# JSONData = "{'useractivity': [{'topic': 'userview', 'channelid': 'c_8067', 'userid': 'u_1714371', 'videoid': 'v_51796', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_9149', 'userid': 'u_7875945', 'videoid': 'v_16292', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_9921', 'userid': 'u_8813132', 'videoid': 'v_45140', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_3919', 'userid': 'u_3875289', 'videoid': 'v_18414', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_7475', 'userid': 'u_7809244', 'videoid': 'v_76435', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_8711', 'userid': 'u_4706076', 'videoid': 'v_66865', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_1644', 'userid': 'u_3121991', 'videoid': 'v_11385', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_5402', 'userid': 'u_826376', 'videoid': 'v_55557', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_5624', 'userid': 'u_4566523', 'videoid': 'v_55522', 'activitydate': '2015-09-24T22:53:15Z'}, {'topic': 'userview', 'channelid': 'c_4721', 'userid': 'u_6786679', 'videoid': 'v_11758', 'activitydate': '2015-09-24T22:53:15Z'}]}"
-# JSONData = "{'useractivity': [{'topic': 'userview', 'channelid': 'c_4554', 'userid': 'u_7542118', 'videoid': 'v_71162', 'activitydate': '2015-09-24T22:53:14Z'}, {'topic': 'userview', 'channelid': 'c_8381', 'userid': 'u_8935585', 'videoid': 'v_1428', 'activitydate': '2015-09-24T22:53:14Z'}, {'topic': 'userview', 'channelid': 'c_6366', 'userid': 'u_7247424', 'videoid': 'v_96060', 'activitydate': '2015-09-24T22:53:14Z'}, {'topic': 'userview', 'channelid': 'c_1402', 'userid': 'u_5600706', 'videoid': 'v_73964', 'activitydate': '2015-09-24T22:53:14Z'}, {'topic': 'userview', 'channelid': 'c_3478', 'userid': 'u_7224356', 'videoid': 'v_1365', 'activitydate': '2015-09-24T22:53:14Z'}, {'topic': 'userview', 'channelid': 'c_7445', 'userid': 'u_1913683', 'videoid': 'v_25920', 'activitydate': '2015-09-24T22:53:14Z'}, {'topic': 'userview', 'channelid': 'c_7477', 'userid': 'u_9736978', 'videoid': 'v_70591', 'activitydate': '2015-09-24T22:53:14Z'}, {'topic': 'userview', 'channelid': 'c_1899', 'userid': 'u_619195', 'videoid': 'v_90287', 'activitydate': '2015-09-24T22:53:14Z'}, {'topic': 'userview', 'channelid': 'c_8780', 'userid': 'u_6526357', 'videoid': 'v_72924', 'activitydate': '2015-09-24T22:53:14Z'}, {'topic': 'userview', 'channelid': 'c_234', 'userid': 'u_9055083', 'videoid': 'v_15733', 'activitydate': '2015-09-24T22:53:14Z'}]}"
-# print parseUserActivityJSON(JSONData)
-
+    itemList = line.split(DE_DEFAULT_DELIMITER)
+    timestamp = parseDateTimeMinute(itemList[0])
+    return timestamp + ":" + itemList[1] + ":" + itemList[2] + ":" + itemList[3]
 
 def parseChannelJSON(JSONData, categoryId, channelList=[]):
     # Return a list of channel key-value pair

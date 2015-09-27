@@ -1,11 +1,16 @@
 
 from datetime import date, datetime, timedelta as td
+from utility.constant import USER_ACTIVETY_TIME_UNIT
 
 def parseDateTimeMinute(timestamp):
     timestamp = str(timestamp)
     if len(timestamp) < 11:
         return ''
-    return timestamp[0:timestamp.rfind(':')]
+    timestamp = timestamp[0:timestamp.rfind(':')]
+    min = str(USER_ACTIVETY_TIME_UNIT * ((int)(timestamp[timestamp.rfind(':') + 1: \
+                                                    len(timestamp) + 1]) / USER_ACTIVETY_TIME_UNIT))
+    return timestamp[0:timestamp.rfind(':')] + ':' + min
+    
 
 def parseDateString(dateStr):
     # Should be in the format of "2015-9-15T12:00:02.0Z"

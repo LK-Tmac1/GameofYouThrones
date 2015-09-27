@@ -35,6 +35,8 @@ TOPIC_USER_SHARE = 'usershare'
 TOPIC_USER_SUBSCRIBE = 'usersubscribe'
 TOPIC_USER_LIKE = 'userlike'
 TOPIC_USER_DISLIKE = 'userdislike'
+DE_DEFAULT_DELIMITER = ' '
+USER_ACTIVETY_TIME_UNIT = 10
 # HBase
 HB_TB_VIDEO_STAT_DAILY = 'videostatdaily'
 HB_TB_VIDEO_STAT_MINUTE = 'videostatminute'
