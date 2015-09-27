@@ -20,7 +20,7 @@ HDFS_DEFAULT_PATH = '/data'
 LOCAL_DEFAULT_PATH = "/home/ubuntu/project"
 PROJECT_PATH = LOCAL_DEFAULT_PATH + "/GameofYouThrones"
 LOCAL_TEMP_PATH = LOCAL_DEFAULT_PATH + HDFS_DEFAULT_PATH
-FILE_TYPE = '.json'
+FILE_TYPE = '.txt'
 SPARK_CMD = """export PYTHONPATH=$SPARK_HOME/python/:$PYTHONPATH
 export PYTHONPATH=$SPARK_HOME/python/lib/py4j-0.8.2.1-src.zip:$PYTHONPATH
 export PYTHONPATH="%s" """ % (PROJECT_PATH)
@@ -36,5 +36,6 @@ TOPIC_USER_SUBSCRIBE = 'usersubscribe'
 TOPIC_USER_LIKE = 'userlike'
 TOPIC_USER_DISLIKE = 'userdislike'
 # HBase
-
+HB_TB_VIDEO_STAT_DAILY = 'videostatdaily'
+HB_TB_VIDEO_STAT_MINUTE = 'videostatminute'
 # Web UI

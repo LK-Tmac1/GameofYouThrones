@@ -13,6 +13,7 @@ def dataConsumer(topic, group='default', count=1, dateStr=''):
     dataList = []
     for message in messages:
         dataList.append(message.message.value)
+    print "----", len(dataList)
     if len(dataList) > 0:
         flush2HDFS(topic, dataList, dateStr)
     
@@ -33,5 +34,5 @@ def flush2HDFS(topic, dataSet, dateStr=''):
     os.system("hdfs dfs -put -f %s %s" % (localFilePath, hdfsPath))
     # os.remove(localFilePath) 
 
-#dataConsumer(TOPIC_USER_VIEW, count=100)
+dataConsumer(TOPIC_USER_VIEW, count=1000)
 

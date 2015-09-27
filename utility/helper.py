@@ -48,4 +48,3 @@ def getTimestampNow():
     strTimestamp = str(datetime.now()).replace(' ', 'T')
     return strTimestamp[0:strTimestamp.rfind(".")] + "Z"
 
-

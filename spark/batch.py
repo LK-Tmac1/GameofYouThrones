@@ -12,18 +12,15 @@ def videoStatDaily(dateStr='', topic=TOPIC_USER_VIEW):
     dateStr = str(parseDateString(dateStr))
     if dateStr == '':
         dateStr = str(parseDateString(getTimestampNow()))
-    #filePath = HDFS_MASTER_DNS + HDFS_DEFAULT_PATH + '/' + topic + '/' + dateStr + FILE_TYPE
-    filePath = 'test.txt'
-    print filePath
+    filePath = HDFS_MASTER_DNS + HDFS_DEFAULT_PATH + '/' + topic + '/' + '2015-09-24' + FILE_TYPE
     data = sc.textFile(filePath)
-    print data.collect()
-    #useractivity = data.map(lambda line: parseUserActivityJSON(line))
-    #aggreVideoStat = useractivity.map(lambda line : parseActivityAggre(line)).countByValue()
+    useractivity = data.map(lambda line: parseUserActivityJSON(line))
+    aggreVideoStat = useractivity.map(lambda line : parseActivityAggre(line)).countByValue()
     #timeMinuteStat = useractivity.map(lambda line : parseActivityMinute(line)).countByValue()
-    # 2015-09-24:v_51796:c_8067
+    # 2015-09-24:v_51796:c_8067:userview
     # 2015-09-24T22:53:v_51796:userview
     print '========'
-    #print aggreVideoStat.collect()
+    print aggreVideoStat.collect()
     print '--------'
     #print timeMinuteStat.collect()
     

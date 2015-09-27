@@ -7,7 +7,7 @@ from utility.constant import MasterPublicIP, DB_TB_CHANNEL, DB_NAME, \
 from mysql.mysqldao import select, execute_query
 from api.video import getVIdByChannelActivity, getVideoById
 from utility.helper import parseDateString, getTimestampNow
-from dataengineering import videoStatDaily, userActivityRandomBatch
+from dataengineering import userActivityRandomBatch
 
 def dataProducer(topic, msg):
     producer = SimpleProducer(KafkaClient(MasterPublicIP + ":9092"))
@@ -27,19 +27,6 @@ def produceVideoByAllChannel(ALL=False):
         produceVideoByChannel(cID[0], ALL)
         print "----------Done for channel " + cID[0]
         # update ETL table in mysql
-        
-def produceVideoStatByDay(videoId, dateStr=''):
-    # Produce the statistics data for a video on a given date
-    video = select(DB_NAME, DB_TB_VIDEO, ['publishedAt'], ['id'], [{'id':videoId}])
-    if len(video) > 0:
-        dateStr = str(parseDateString(dateStr))
-        if dateStr == '':
-            dateStr = str(parseDateString(getTimestampNow()))
-        data = videoStatDaily()
-        data["id"] = videoId
-        data["publishedat"] = video[0][0]
-        data["statdate"] = dateStr
-        dataProducer("videostat", data)
 
 def produceUserActivity(topic=TOPIC_USER_VIEW, videoId='', dateStr='', count=1):
     # Produce user activity data for a given video on a given date
@@ -47,6 +34,6 @@ def produceUserActivity(topic=TOPIC_USER_VIEW, videoId='', dateStr='', count=1):
     dataProducer(topic, useractivity)
 
 for x in xrange(0, 1000):
-    produceUserActivity(topic=TOPIC_USER_VIEW, videoId='', count=10)
+    produceUserActivity(topic=TOPIC_USER_VIEW, videoId='', count=100)
 print "-----"
     
