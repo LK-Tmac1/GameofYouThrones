@@ -1,8 +1,10 @@
 from pyspark import SparkContext, SparkConf
 from utility.constant import TOPIC_USER_VIEW, HDFS_MASTER_DNS, HDFS_DEFAULT_PATH, FILE_TYPE
 from utility.helper import parseDateString, getTimestampNow
-from transform import transformActivity, transformActivityHourly, transformActivityAggre
+from transform import transformActivity, transformActivityAggre
  
+ 
+
 conf = SparkConf().setAppName("testBatch")
 sc = SparkContext(conf=conf)
 
@@ -17,26 +19,16 @@ def loadDataFromHDFS(dateStr, topic):
     data.filter(lambda line: line.strip(' \t\n\r') != '')
     return data
     
-def videoStatBatch(dateStr, topic):
+def videoStatBatchDaily(dateStr, topic):
     data = loadDataFromHDFS(dateStr, topic)
-    print "-----Batch on date"
     dailyVideoStat = data.map(lambda line : (transformActivity(line), 1)).reduceByKey(lambda a, b : a + b).sortByKey().collect()
     dailyVideoStatAggre = transformActivityAggre(dailyVideoStat)
+    
+    
+def videoStatBatchHourly(dateStr, topic):
+    data = loadDataFromHDFS(dateStr, topic)
     hourlyVideoStat = data.map(lambda line : (transformActivity(line, hourly=True), 1)).reduceByKey(lambda a, b : a + b).sortByKey().collect()
     hourlyVideoStatAggre = transformActivityAggre(hourlyVideoStat, hourly=True)
-    for d in dailyVideoStat:
-        print d
-    print "~~~~~Batch on daily aggregation"
-    for d in dailyVideoStatAggre:
-        print d
-    print "=====Batch on hour"
-    for d in hourlyVideoStat:
-        print d
-    print ".....Batch on hourly aggregation"
-    for d in hourlyVideoStatAggre:
-        print d
     
-
-dateStr = '2015-09-27T'
-videoStatBatch(dateStr, '')
-print "Done"
+def videoStatBatchMinute():
+    data = ""

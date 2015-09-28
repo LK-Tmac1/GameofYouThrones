@@ -2,13 +2,14 @@
 
 from kafka.client import KafkaClient
 from kafka.consumer import SimpleConsumer
-from utility.constant import MasterPublicIP, TOPIC_USER_VIEW, HDFS_DEFAULT_PATH, FILE_TYPE, \
+from utility.constant import MasterPublicIP, HDFS_DEFAULT_PATH, FILE_TYPE, \
     MAX_BUFFER_SIZE, LOCAL_TEMP_PATH
 from utility.helper import parseDateString, getTimestampNow
 import os
 
 def dataConsumer(topic, group='default', count=1, dateStr=''):
-    kafka_consumer = SimpleConsumer(KafkaClient(MasterPublicIP + ":9092"), group, topic, max_buffer_size=MAX_BUFFER_SIZE)
+    kafka_consumer = SimpleConsumer(KafkaClient(MasterPublicIP + ":9092"), \
+                                    group, topic, max_buffer_size=MAX_BUFFER_SIZE)
     messages = kafka_consumer.get_messages(count=count)
     dataList = []
     for message in messages:
@@ -28,11 +29,11 @@ def flush2HDFS(topic, dataSet, dateStr=''):
         os.system('sudo mkdir ' + localPath)
     if not os.path.exists(localFilePath):
         os.mknod(localFilePath)
+    else:
+        os.remove(localFilePath) 
+        os.system("hdfs dfs -rm %s " % (hdfsPath))
     tempfile = open(localFilePath, "w")
     for data in dataSet:
         tempfile.write(data + "\n")
     os.system("hdfs dfs -put -f %s %s" % (localFilePath, hdfsPath))
-    # os.remove(localFilePath) 
-
-dataConsumer(TOPIC_USER_VIEW, count=1000)
 

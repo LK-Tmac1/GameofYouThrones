@@ -27,7 +27,7 @@ def userActivityRandom(topic=TOPIC_USER_VIEW, vid='', cid='', uid='', dateStr=''
     dataList.append(dateStr if dateStr != '' else getTimestampNow())
     dataList.append(topic if topic != '' else TOPIC_USER_VIEW)
     dataList.append(vid if vid != '' else "v_" + str(randint(1, 100000)))
-    dataList.append(cid if cid != '' else "c_" + str(randint(1, 10000)))
+    # dataList.append(cid if cid != '' else "c_" + str(randint(1, 10000)))
     dataList.append(uid if uid != '' else "u_" + str(randint(1, 10000000)))
     print dataList
     return DE_DEFAULT_DELIMITER.join(dataList)

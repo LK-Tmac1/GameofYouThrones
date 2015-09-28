@@ -2,11 +2,9 @@
 
 from kafka.client import KafkaClient
 from kafka.producer import SimpleProducer
-from utility.constant import MasterPublicIP, DB_TB_CHANNEL, DB_NAME, \
-    DB_TB_VIDEO, TOPIC_USER_VIEW
-from mysql.mysqldao import select, execute_query
+from utility.constant import MasterPublicIP, DB_TB_CHANNEL, DB_NAME, TOPIC_USER_VIEW
+from mysql.mysqldao import  execute_query
 from api.video import getVIdByChannelActivity, getVideoById
-from utility.helper import parseDateString, getTimestampNow
 from dataengineering import userActivityRandomBatch
 
 def dataProducer(topic, msg):
@@ -33,7 +31,4 @@ def produceUserActivity(topic=TOPIC_USER_VIEW, videoId='', dateStr='', count=1):
     useractivity = userActivityRandomBatch(topic=topic, vid=videoId, dateStr=dateStr, size=count)
     dataProducer(topic, useractivity)
 
-for x in xrange(0, 10):
-    produceUserActivity(topic=TOPIC_USER_VIEW, videoId='', count=100)
-print "-----"
     

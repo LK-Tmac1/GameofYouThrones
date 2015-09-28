@@ -9,7 +9,7 @@ def transformActivity(line, hourly=False):
             timestamp = parseDateTimeMinute(itemList[0])
         else:
             timestamp = str(parseDateString(itemList[0]))
-        return itemList[1] + ":" + itemList[2] + ":" + itemList[3] + ":" + timestamp
+        return itemList[1] + ":" + itemList[2] + ":" + ":" + timestamp
 
 def transformActivityAggre(videoStatList, hourly=False):
     aggreVideoStat = []
@@ -27,9 +27,8 @@ def transformActivityAggre(videoStatList, hourly=False):
             count = 0
             for dailyVideo in videoList:
                 count = count + int(dailyVideo[1])
-            aggreVideoStat.append((videoList[len(videoList) - 1][0], count))
+            aggreVideoStat.append((videoList[len(videoList) - 1][0]+'', count))
             for i in xrange(len(videoList) - 2, -1, -1):
                 count = count - int(videoList[i][1])
                 aggreVideoStat.append((videoList[i][0], count))
     return aggreVideoStat
-    
