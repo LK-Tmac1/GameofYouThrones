@@ -1,24 +1,6 @@
 #!/usr/bin/python
 
 from utility.helper import transformListToString, parseVIdByImageURL
-import ast
-from utility.helper import parseDateString, parseDateTimeMinute
-from utility.constant import DE_DEFAULT_DELIMITER
-
-def parseLineToDict(line):
-    if not isinstance(line, dict):
-        line = ast.literal_eval(str(line))
-    return line
-
-def parseActivityDaily(line):
-    itemList = line.split(DE_DEFAULT_DELIMITER)
-    dateKey = str(parseDateString(itemList[0]))
-    return dateKey + ":" + itemList[1] + ":" + itemList[2] + ":" + itemList[3]
-
-def parseActivityMinute(line):
-    itemList = line.split(DE_DEFAULT_DELIMITER)
-    timestamp = parseDateTimeMinute(itemList[0])
-    return timestamp + ":" + itemList[1] + ":" + itemList[2] + ":" + itemList[3]
 
 def parseChannelJSON(JSONData, categoryId, channelList=[]):
     # Return a list of channel key-value pair

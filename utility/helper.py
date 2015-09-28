@@ -7,9 +7,11 @@ def parseDateTimeMinute(timestamp):
     if len(timestamp) < 11:
         return ''
     timestamp = timestamp[0:timestamp.rfind(':')]
-    min = str(USER_ACTIVETY_TIME_UNIT * ((int)(timestamp[timestamp.rfind(':') + 1: \
+    timeUnit = str(USER_ACTIVETY_TIME_UNIT * ((int)(timestamp[timestamp.rfind(':') + 1: \
                                                     len(timestamp) + 1]) / USER_ACTIVETY_TIME_UNIT))
-    return timestamp[0:timestamp.rfind(':')] + ':' + min
+    if len(timeUnit[timeUnit.rfind(':') + 1:len(timeUnit)]) <= 2:
+        timeUnit = timeUnit[0:timeUnit.rfind(':')] + '00'
+    return timestamp[0:timestamp.rfind(':')] + ':' + timeUnit
     
 
 def parseDateString(dateStr):
