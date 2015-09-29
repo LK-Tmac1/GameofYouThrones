@@ -39,15 +39,17 @@ def putVideoStat(mode, dataDictList, table=''):
             columnMember = columnFamily + ':' + dataValue['timestamp']
             newDataDict[columnMember] = dataValue['value']
             table.put(dataKey, newDataDict)
-    
-listA = [
-('userview:v_123:2015-09-27T19:00', 12),
-('userlike:v_123:2015-09-27T17:00', 3),
-('userview:v_456:2015-09-27T19:00', 12),
-('userview:v_123:2015-09-28T18:00', 6),
-('userview:v_123:2015-09-27T20:00', 129)
-]
-dataDictList = parseVideoStat(listA)
-putVideoStat(MODE_VIDEO_STAT_HOURLY_AGGRE, dataDictList)
-print "===="
-print videoStatTable.row('v_123')
+
+def getVideoStatByRowKey(rowKey, columnFamilyMember=[]):
+    dataDict = {}
+    row = videoStatTable.row(rowKey)
+    if isinstance(columnFamilyMember, basestring):
+        columnFamilyMember = [columnFamilyMember]
+    if len(columnFamilyMember) > 0:
+        for cfm in columnFamilyMember:
+            dataDict[cfm] = row[cfm]
+    else:
+        dataDict = row
+    return dataDict
+
+print getVideoStatByRowKey('v_123', 'userlike_hourly_aggre:2015-09-27T17:00')
