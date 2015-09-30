@@ -34,10 +34,11 @@ TOPIC_USER_VIEW = 'userview'
 TOPIC_USER_SHARE = 'usershare'
 TOPIC_USER_SUBSCRIBE = 'usersubscribe'
 TOPIC_USER_LIKE = 'userlike'
-TOPIC_USER_DISLIKE = 'userdislike'
-DE_DEFAULT_DELIMITER = ' '
+TOPIC_USER_COMMENT = 'usercomment'
+DE_USER_ACTIVITY_DELIMITER = ' '
 USER_ACTIVETY_TIME_UNIT = 60
 # HBase
+HB_VIDEO_METADATA_LIST = ['id', 'title', 'channelid', 'publishedat', 'description', 'imageurl', 'categoryid']
 HB_TB_VIDEO_STAT = 'videostat'
 MODE_VIDEO_STAT_DAILY = 'MODE_VIDEO_STAT_DAILY'
 MODE_VIDEO_STAT_HOURLY = 'MODE_VIDEO_STAT_HOURLY'

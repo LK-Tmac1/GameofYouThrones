@@ -55,3 +55,8 @@ def getTimestampNow():
     strTimestamp = str(datetime.now()).replace(' ', 'T')
     return strTimestamp[0:strTimestamp.rfind(".")] + "Z"
 
+def generateRandomTimeStr(dateStr, count=1):
+    timeList = []
+    for i in xrange(0, count):
+        timeList.append("%sT%02d:%02d:%02d" % (dateStr, randint(0, 23), randint(0, 59), randint(0, 59)))
+    return timeList

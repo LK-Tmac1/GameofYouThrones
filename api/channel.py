@@ -3,7 +3,7 @@
 from client import getJSONData
 from utility.constant import  DB_NAME, DB_TB_CHANNEL, DB_TB_CATEGORY
 from api.parser import parseChannelJSON
-from mysql.mysqldao import insert, select, update
+from integrate.mysqldao import insert, select, update
  
     
 def saveChannelByCategory(categoryId):

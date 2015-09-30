@@ -1,8 +1,8 @@
-from utility.constant import DE_DEFAULT_DELIMITER
+from utility.constant import DE_USER_ACTIVITY_DELIMITER
 from utility.helper import parseDateString, parseDateTimeMinute
 
 def transformActivity(line, hourly=False):
-    itemList = line.split(DE_DEFAULT_DELIMITER)
+    itemList = line.split(DE_USER_ACTIVITY_DELIMITER)
     if len(itemList) > 3:
         timestamp = ''
         if hourly:
