@@ -14,11 +14,12 @@ def produceUserActivity(topic=TOPIC_USER_VIEW, useractivityList):
     # Produce user activity data for a given video on a given date
     dataProducer(topic, '\n'.join(useractivityList))
 
-def userActivityRandom(topic=TOPIC_USER_VIEW, vid='', cid='', dateStr=''):
+def userActivityRandom(topic=TOPIC_USER_VIEW, vid='', cid='', caid='', dateStr=''):
     dataList = []
+    # Sample output: 2015-09-30T16:40:00Z category channel video userview
     dataList.append(dateStr if dateStr != '' else getTimestampNow())
+    dataList.append(caid if caid != '' else 'unknown_category')
+    dataList.append(cid if cid != '' else 'ch_rnd' + str(randint(1, 10000)))
+    dataList.append(vid if vid != '' else 'v_rnd' + str(randint(1, 100000)))
     dataList.append(topic if topic != '' else TOPIC_USER_VIEW)
-    dataList.append(vid if vid != '' else "v_" + str(randint(1, 100000)))
-    dataList.append(cid if cid != '' else "c_" + str(randint(1, 10000)))
-    dataList.append("u_" + str(randint(1, 10000000)))
-    return DE_USER_ACTIVITY_DELIMITER.join(dataList)    
+    return DE_USER_ACTIVITY_DELIMITER.join(dataList)

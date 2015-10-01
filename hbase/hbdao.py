@@ -1,14 +1,13 @@
 import happybase
 from integrate.mysqldao import update
-from utility.constant import HB_TB_VIDEO_STAT, MODE_VIDEO_STAT_HOURLY_AGGRE, \
-    MODE_VIDEO_STAT_HOURLY, MODE_VIDEO_STAT_DAILY_AGGRE, MODE_VIDEO_STAT_DAILY, \
+from utility.constant import HB_TB_MASTER, MODE_STAT_HOURLY_ACCU, \
+    MODE_STAT_HOURLY, MODE_STAT_DAILY_ACCU, MODE_STAT_DAILY, \
     HB_VIDEO_METADATA_LIST, DB_NAME, DB_TB_VIDEO
 
 connection = happybase.Connection('localhost')    
 connection.open()
-videoStatTable = connection.table(HB_TB_VIDEO_STAT)
 
-def parseVideoStat(dataTupleList):
+def formatUseractivityStat(dataTupleList):
     dataDictList = {}
     for data in dataTupleList:
         dataDict = {}
@@ -24,7 +23,8 @@ def parseVideoStat(dataTupleList):
         dataDictList[vid].append(dataDict)
     return dataDictList
 
-def putVideoMetadata(videoTupleList):
+def putMetadata(videoTupleList):
+    videoStatTable = connection.table(HB_TB_MASTER)
     column_family = 'metadata:'
     for videoTuple in videoTupleList:
         columnData = {}
@@ -35,34 +35,32 @@ def putVideoMetadata(videoTupleList):
         print videoid, columnData[column_family + HB_VIDEO_METADATA_LIST[1]]
         videoStatTable.put(videoid, columnData)
         update(DB_NAME, DB_TB_VIDEO, ['metadata'], ['id'], [{'id':videoid, 'metadata':'Y'}])
-        
 
-def putVideoStat(mode, dataDictList, table=''):
+def putUseractivityStat(mode, dataDictList):
+    """
+    :dataDictList should be a list of dict, where on each dict:
+        Key=useractivity:row_composite_key:timestmp, value=count
+        e.g., {userview:channelid:videoid:2015-09-28T12:02:20Z': 200}
+    :mode the mode of this user activity, say hourly basis and accumulative sum
+    """
+    table = connection.table(HB_TB_MASTER)
+    modeColumnSuffixDict = {
+        MODE_STAT_HOURLY:'_hourly', MODE_STAT_HOURLY_ACCU:'_hourly_accu',
+        MODE_STAT_DAILY:'_daily', MODE_STAT_DAILY_ACCU:'_daily_accu'}
     for dataKey, dataValueList in dataDictList.items():
         for dataValue in dataValueList:
             newDataDict = {}
             columnFamily = dataValue['useractivity']
-            if mode == MODE_VIDEO_STAT_HOURLY:
-                columnFamily = columnFamily + '_hourly'
-            elif mode == MODE_VIDEO_STAT_DAILY:
-                columnFamily = columnFamily + '_daily'
-            elif mode == MODE_VIDEO_STAT_DAILY_AGGRE:
-                columnFamily = columnFamily + '_daily_aggre'
-            elif mode == MODE_VIDEO_STAT_HOURLY_AGGRE:
-                columnFamily = columnFamily + '_hourly_aggre'
-            columnMember = columnFamily + ':' + dataValue['timestamp']
-            newDataDict[columnMember] = dataValue['value']
-            videoStatTable.put(dataKey, newDataDict)
+            columnQualifer = columnFamily + modeColumnSuffixDict[mode] + ':' + dataValue['timestamp']
+            newDataDict[columnQualifer] = dataValue['value']
+            table.put(dataKey, newDataDict)
 
-def getVideoByRowKey(rowKey, columnFamilyMember=[]):
-    dataDict = {}
-    row = videoStatTable.row(rowKey)
-    columnFamilyMember = [columnFamilyMember]
-    if len(columnFamilyMember) > 0:
-        for cfm in columnFamilyMember:
-            dataDict[cfm] = row[cfm]
-    else:
-        dataDict = row
-    return dataDict
-
-print getVideoByRowKey('DsuxXH8Q76o', 'metadata:title')
+def scanDataByRowPrefix(prefix, tableName, columnFamilyMember=[]):
+    dataDictList = [{}]
+    rows = connection.table(tableName).scan(row_prefix=prefix, \
+                columns=columnFamilyMember, sorted_columns=True)
+    for r in rows:
+        print r
+        
+# DsuxXH8Q76o
+print scanDataByRowPrefix('v_', HB_TB_MASTER, ['userview_hourly_aggre'])

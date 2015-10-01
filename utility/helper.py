@@ -1,18 +1,19 @@
 
 from datetime import date, datetime, timedelta as td
-from utility.constant import USER_ACTIVETY_TIME_UNIT
+from utility.constant import USER_ACTIVETY_MINUTE_UNIT
+from random import randint
 
 def parseDateTimeMinute(timestamp):
+    # Given a timestamp, "2015-9-15T12:00:02.0Z", parse it to a given unit level
     timestamp = str(timestamp)
     if len(timestamp) < 11:
         return ''
     timestamp = timestamp[0:timestamp.rfind(':')]
-    timeUnit = str(USER_ACTIVETY_TIME_UNIT * ((int)(timestamp[timestamp.rfind(':') + 1: \
-                                                    len(timestamp) + 1]) / USER_ACTIVETY_TIME_UNIT))
-    if len(timeUnit[timeUnit.rfind(':') + 1:len(timeUnit)]) <= 2:
-        timeUnit = timeUnit[0:timeUnit.rfind(':')] + '00'
+    minute = int(timestamp[timestamp.rfind(':') + 1: len(timestamp) + 1])
+    timeUnit = str(USER_ACTIVETY_MINUTE_UNIT * (minute / USER_ACTIVETY_MINUTE_UNIT))
+    if len(timeUnit) < 2:
+        timeUnit = '0' + timeUnit
     return timestamp[0:timestamp.rfind(':')] + ':' + timeUnit
-    
 
 def parseDateString(dateStr):
     # Should be in the format of "2015-9-15T12:00:02.0Z"

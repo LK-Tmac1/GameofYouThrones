@@ -1,34 +1,56 @@
 from utility.constant import DE_USER_ACTIVITY_DELIMITER
 from utility.helper import parseDateString, parseDateTimeMinute
+from hbase.format import formatCategoryId, formatChannelId, formatVideoId, \
+formatCategoryVideoIdPair, formatChannelVideoIdPair, formatCategoryChannelIdPair
 
 def transformActivity(line, hourly=False):
     itemList = line.split(DE_USER_ACTIVITY_DELIMITER)
-    if len(itemList) > 3:
-        timestamp = ''
-        if hourly:
-            timestamp = parseDateTimeMinute(itemList[0])
-        else:
-            timestamp = str(parseDateString(itemList[0]))
-        return itemList[1] + ":" + itemList[2] + ":" + ":" + timestamp
+    # Sample line: 2015-09-30T16:40:00Z category channel video userview
+    if len(itemList) >= 5:
+        timestamp = parseDateTimeMinute(itemList[0]) if hourly else str(parseDateString(itemList[0]))
+        categoryId = formatCategoryId(itemList[1])
+        channelId = formatChannelId(itemList[2])
+        videoId = formatVideoId(itemList[3])
+        useractivity = itemList[4]
+        categoryVideoId = formatCategoryVideoIdPair(videoId, categoryId)
+        channelVideoId = formatChannelVideoIdPair(videoId, channelId)
+        categoryChannelId = formatCategoryChannelIdPair(categoryId, channelId)
+        prefix_suffix = useractivity + ':%s:' + timestamp
+        # useractivity:categoryid:channelid:videoid:timestamp
+        masterRow = prefix_suffix % categoryId + ":" + channelId + ":" + videoId
+        # useractivity:categoryid:videoid:timestamp
+        categoryVideoRow = prefix_suffix % categoryVideoId
+        # useractivity:categoryid:channelid:timestamp
+        categoryChannelRow = prefix_suffix % categoryChannelId
+        # useractivity:channelid:videoid:timestamp
+        channelVideoRow = prefix_suffix % channelVideoId
+        return [masterRow, categoryVideoRow, categoryChannelRow, channelVideoRow]
+        
 
-def transformActivityAggre(videoStatList, hourly=False):
+def transformActivityAccuSum(useractivityList, hourly=False):
+    """
+    # Each element: tuple of (useractivity:rowkey:timestamp, count)
+    # Daily sample: (userview:channelid:videoid:2015-09-28, 200)
+    # Hourly sample: (userview:channelid:videoid:2015-09-28T12:30, 200)
+    Use bucket, i.e. a list of dictionary to compute accumulative sums.
+    Return a list of tuple: key and the accumulative sum
+    """ 
     aggreVideoStat = []
-    if isinstance(videoStatList, list):
-        videoBucket = {}
-        for dailyVideo in videoStatList:
-            bucketKey = dailyVideo[0]
+    if isinstance(useractivityList, list):
+        accuBucket = {}
+        for useractivity in useractivityList:
+            bucketKey = useractivity[0]
             bucketKey = bucketKey[0:bucketKey.rfind(':')]
             if hourly:
+                # Further split the time to hour level
                 bucketKey = bucketKey[0:bucketKey.rfind(':')]
-            if bucketKey not in videoBucket:
-                videoBucket[bucketKey] = []
-            videoBucket[bucketKey].append(dailyVideo)
-        for bucketKey, videoList in videoBucket.items():
+            if bucketKey not in accuBucket:
+                accuBucket[bucketKey] = []
+            accuBucket[bucketKey].append(useractivity)
+        for bucketKey, useractivityList in accuBucket.items():
             count = 0
-            for dailyVideo in videoList:
-                count = count + int(dailyVideo[1])
-            aggreVideoStat.append((videoList[len(videoList) - 1][0]+'', count))
-            for i in xrange(len(videoList) - 2, -1, -1):
-                count = count - int(videoList[i][1])
-                aggreVideoStat.append((videoList[i][0], count))
+            # Calculate the accumulative sum backwards
+            for useractivity in useractivityList:
+                count = count + int(useractivity[1])
+                aggreVideoStat.append((useractivity[0], count))
     return aggreVideoStat
