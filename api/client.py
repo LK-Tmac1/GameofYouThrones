@@ -6,6 +6,7 @@ import json
 
 def getJSONData(resource, Filter, part="id", maxResults=False, pageToken=None):
     requestURL = API_HOME + resource + "?key=" + API_KEY + "&part=" + part + "&" + Filter
+    print requestURL
     if maxResults:
         requestURL = requestURL + "&maxResults=50"
     if pageToken is not None:

@@ -1,26 +1,27 @@
 #!/usr/bin/python
 
 from utility.helper import transformListToString, parseVIdByImageURL
+from api.client import getJSONData
 
-def parseChannelJSON(JSONData, categoryId, channelList=[]):
+def parseChannelJSON(JSONData, categoryId='', channelList=None):
+    if channelList is None:
+        channelList = []
     # Return a list of channel key-value pair
     if "items" in JSONData:
         for item in JSONData["items"]:
             snippet = item["snippet"]
-            stat = item["statistics"]
             channelDict = {
             "id":item["id"], "title":snippet["title"],
             "description":snippet["description"],
-            "viewcount":stat["viewCount"],
-            "commentcount":stat["commentCount"],
-            "subscribercount":stat["subscriberCount"],
-            "videocount":stat["videoCount"],
-            "categoryid":categoryId,
-            "activityDate":"",
-            "playlistFlag":'N' }
-            if 'publishedAt' not in snippet:
-                snippet["publishedAt"] = "null"
-            channelDict["publishedat"] = snippet["publishedAt"]
+            "categoryid":categoryId}
+            if "statistics" in item:
+                stat = item["statistics"] 
+                channelDict["viewcount"] = stat["viewCount"]
+                channelDict["commentcount"] = stat["commentCount"]
+                channelDict["subscribercount"] = stat["subscriberCount"]
+                channelDict["videocount"] = stat["videoCount"] 
+            channelDict["publishedat"] = "null" if 'publishedAt' not in snippet \
+                            else snippet["publishedAt"]
             channelList.append(channelDict)
     return channelList
 
@@ -84,3 +85,4 @@ def parseVideoIdByActivityJSON(JSONData, VIdSet=set([])):
                 if ID != '' and ID not in VIdSet:
                     VIdSet.add(ID)
     return VIdSet
+

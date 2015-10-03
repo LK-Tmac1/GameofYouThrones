@@ -55,12 +55,14 @@ def putUseractivityStat(mode, dataDictList):
             newDataDict[columnQualifer] = dataValue['value']
             table.put(dataKey, newDataDict)
 
-def scanDataByRowPrefix(prefix, tableName, columnFamilyMember=[]):
+def scanDataByRowPrefix(prefix, columnFamilyMember=[]):
     dataDictList = [{}]
-    rows = connection.table(tableName).scan(row_prefix=prefix, \
+    rows = connection.table(HB_TB_MASTER).scan(row_prefix=prefix, \
                 columns=columnFamilyMember, sorted_columns=True)
     for r in rows:
-        print r
+        print r[0]
+    return rows
+
         
 # DsuxXH8Q76o
-print scanDataByRowPrefix('v_', HB_TB_MASTER, ['userview_hourly_aggre'])
+print scanDataByRowPrefix('v_', ['userview_hourly_aggre'])
