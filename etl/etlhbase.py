@@ -4,7 +4,7 @@ from utility.constant import DB_TB_VIDEO, DB_NAME, TOPIC_USER_VIEW, \
 from utility.helper import getTimestampNow, getDateRangeList, generateRandomTimeStr
 from random import randint
 from kafkaingest.producer import userActivityRandom
-from kafkaingest.consumer import flush2HDFS
+from kafkaingest.consumer import flush2Local
 
 def userActivityETL(startDate=''):
     videoList = select(DB_NAME, DB_TB_VIDEO, ['id', 'channelid', 'categoryid'],
@@ -25,9 +25,9 @@ def userActivityETL(startDate=''):
                 for dateTime in generateRandomTimeStr(dateValue, randint(0, value)):
                     dataSet.append(userActivityRandom(topic, vid=video[0], cid=video[1],
                                 caid=video[2], dateStr=dateTime))
-            flush2HDFS('\n'.join(dataSet), dateStr='MASTERDATA')
-            count = count + 1
-            print '----', count
+            flush2Local('\n'.join(dataSet))
+        count = count + 1
+        print '----', count
         update(DB_NAME, DB_TB_VIDEO, ['useractivityflag'], ['id'], [{'useractivityflag':'N', 'id':video[0]}])
 
 userActivityETL()              
