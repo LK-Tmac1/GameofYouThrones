@@ -21,13 +21,23 @@ def putUseractivityStat(dataTupleList):
         print rowKey
 
 def scanDataByRowPrefix(prefix, columnFamilyMember=[]):
-    dataDictList = [{}]
-    rows = connection.table(HB_TB_MASTER).scan(row_prefix=prefix, \
+    return connection.table(HB_TB_MASTER).scan(row_prefix=prefix, \
                 columns=columnFamilyMember, sorted_columns=True)
-    for r in rows:
-        print r[0]
-    return rows
-
-        
+        # each row is a tuple, where the first element is the row key
+        # and the second is an OrderedDict/Tuple of column:value
+        # Example: ([('userview_hourly:2015-07-01T00:00', '4'), ('userview_hourly:2015-07-01T00:30', '8')...])
+"""
 # video_K_mpQtzFjC4
-print scanDataByRowPrefix('video_K_mpQtzFjC4', ['userview_hourly_accum'])
+# video_GyKimbTbHjo
+# channel_UCWLQqXdXHqzoJqu22QgMIlA:video_ODOROmPUXWQ
+# category_26:video_kZaf7D8SnnI
+# category_2:video_bVHEq1nccNQ
+# category_2:video_5cvdtUqN_RY
+rows = scanDataByRowPrefix('video_K_mpQtzFjC4', ['userview_daily:2015-07-01',
+                                                'userview_daily:2015-10-01',
+                                                'userview_daily:2015-01-01'])
+for row in rows:
+    for i in row:
+        print i                                                
+print "====="
+"""

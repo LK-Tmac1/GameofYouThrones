@@ -1,37 +1,45 @@
-{% extends "header.html" %}
-{% block video %}
-       <div id="page-wrapper">
-       <form role="form" method="post">
-			        <div class="col-xs-4">
-			    		  <input class="form-control" id="ex3" name='channelkeyword' type="text" placeholder='Search channel by ID or name'>
-			        </div>
-      		<button type="submit" class="btn btn-default" value='search' >Search</button>
-          <h1>{{ video }}</h1>
-		</form>
-		<div class="col-lg-3">
-            <select data-placeholder="Choose channels" class="chosen-select" tabindex="2">
-             {% for channel in channelList %}
-       				<option>{{ channel.title }}</option>
-    			{% endfor %}
-              </select>
-              <div>
-              <br>
-        <select data-placeholder="Choose user activity" class="chosen-select" tabindex="2">
-       				<option>View</option>
-       				<option>Like</option>
-       				<option>Comment</option>
-       				<option>Share</option>
-       				<option>Subscribe</option>
-              </select>
-              </div>
-       
-        <!-- /#page-wrapper -->
-       </div>
-       </div>
-</div>
+{% extends "header.html" %} {% block video %}
+<div id="page-wrapper">
+	<form role="form" method="post">
+		<div class="col-xs-4">
+			<input class="form-control" id="ex3" name='channelkeyword'
+				type="text" placeholder='Search channel by ID or name'>
+		</div>
+		<button type="submit" class="btn btn-default" value='search'>Search</button>
+	</form>
+	<br>
+	<div class="col-lg-3">
+		<select> {% for channel in channelList %}
+			<option>{{ channel.title }}</option> {% endfor %}
+		</select> <br>
+		<div>
+			<select>
+				<option>View</option>
+				<option>Like</option>
+				<option>Comment</option>
+				<option>Share</option>
+				<option>Subscribe</option>
+			</select>
+		</div>
+		<select>
+			<option>Last 3 days</option>
+			<option>Last 7 days</option>
+			<option>Last 15 days</option>
+			<option>Last 30 days</option>
+			<option>Last 60 days</option>
+		</select>
 	</div>
+	
+	<div>
+	<form role="form" method="get">
+		<button type="submit" class="btn btn-default" value='search'>Submit</button>
+	</form>
+	</div>
+	<!-- /#page-wrapper -->
+</div>
+</div>
 <!-- /#wrapper -->
-
+</div>
 </body>
 </html>
 {% endblock %}
