@@ -18,6 +18,7 @@ def dataConsumer(topic, group='default', count=1, dateStr=''):
         flush2HDFS(dataList, dateStr)
     
 def flush2HDFS(dataSet, dateStr=''):
+    """
     dateStr = parseDateString(dateStr)
     if dateStr == "":
         dateStr = parseDateString(getTimestampNow())
@@ -29,11 +30,11 @@ def flush2HDFS(dataSet, dateStr=''):
     if not os.path.exists(localFilePath):
         os.mknod(localFilePath)
     else:
-        print "--"
-        #os.system("hdfs dfs -rm %s " % (hdfsPath))
-    tempfile = open(localFilePath, "w")
-    for data in dataSet:
-        tempfile.write(data + "\n")
-    #os.system("hdfs dfs -put -f %s %s" % (localFilePath, hdfsPath))
+        os.system("hdfs dfs -rm %s " % (hdfsPath))
+    """
+    tempfile = open("/Users/Kun/Git/GameofYouThrones/sample.txt", "a")  # append mode
+    # for data in dataSet:
+    tempfile.write(dataSet + "\n")
+    # os.system("hdfs dfs -put -f %s %s" % (localFilePath, hdfsPath))
     tempfile.close()
 

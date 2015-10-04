@@ -24,18 +24,6 @@ def formatUseractivityStat(dataTupleList):
         dataDictList[vid].append(dataDict)
     return dataDictList
 
-def putMetadata(videoTupleList):
-    videoStatTable = connection.table(HB_TB_MASTER)
-    column_family = 'metadata:'
-    for videoTuple in videoTupleList:
-        columnData = {}
-        videoid = formatVideoId(videoTuple[0])
-        for i in xrange(1, len(HB_VIDEO_METADATA_LIST)):
-            column_member = column_family + HB_VIDEO_METADATA_LIST[i]
-            columnData[column_member] = '' if videoTuple[i] is None else videoTuple[i].encode('utf-8')
-        videoStatTable.put(videoid, columnData)
-        update(DB_NAME, DB_TB_VIDEO, ['metadata'], ['id'], [{'id':videoTuple[0], 'metadataFlag':'Y'}])
-
 def putUseractivityStat(mode, dataDictList):
     """
     :dataDictList should be a list of dict, where on each dict:

@@ -1,35 +1,34 @@
-from etl.mysqldao import select
-from utility.constant import DB_TB_VIDEO, DB_NAME, HB_VIDEO_METADATA_LIST, TOPIC_USER_VIEW, \
+from etl.mysqldao import select, update
+from utility.constant import DB_TB_VIDEO, DB_NAME, TOPIC_USER_VIEW, \
     TOPIC_USER_LIKE, TOPIC_USER_SHARE, TOPIC_USER_SUBSCRIBE, TOPIC_USER_COMMENT
-from hbase.hbdao import putMetadata
-from utility.helper import parseDateString, getTimestampNow, getDateRangeList, generateRandomTimeStr
+from utility.helper import getTimestampNow, getDateRangeList, generateRandomTimeStr
 from random import randint
 from kafkaingest.producer import userActivityRandom
+from kafkaingest.consumer import flush2HDFS
 
-def videoMetadataETL():
-    videoList = select(DB_NAME, DB_TB_VIDEO, \
-                       HB_VIDEO_METADATA_LIST, ['metadataflag'], [{'metadataflag':'N'}])
-    putMetadata(videoList)
-
-def userActivityETL(startDate='', endDate=''):
-    videoList = select(DB_NAME, DB_TB_VIDEO, ['id', 'publishedat'])
+def userActivityETL(startDate=''):
+    videoList = select(DB_NAME, DB_TB_VIDEO, ['id', 'channelid', 'categoryid'],
+                        ['useractivityflag'], [{'useractivityflag':'N'}])
+    topicRndSeedDict = {
+          TOPIC_USER_VIEW:100,
+          TOPIC_USER_LIKE:20,
+          TOPIC_USER_SHARE:5,
+          TOPIC_USER_COMMENT:5,
+          TOPIC_USER_SUBSCRIBE:5}
+    count = 0
     for video in videoList:
-        if startDate == '':
-            sDate = parseDateString(video[1])
-        if endDate == '':
-            eDate = parseDateString(getTimestampNow())
-        for dateValue in getDateRangeList(sDate, eDate):
-            for dateTime in generateRandomTimeStr(dateValue, randint(0, 200)):
-                userActivityRandom(TOPIC_USER_VIEW, video[0], dateTime)
-            for dateTime in generateRandomTimeStr(dateValue, randint(0, 10)):
-                userActivityRandom(TOPIC_USER_LIKE, video[0], dateTime)
-            for dateTime in generateRandomTimeStr(dateValue, randint(0, 5)):
-                userActivityRandom(TOPIC_USER_SHARE, video[0], dateTime)
-            for dateTime in generateRandomTimeStr(dateValue, randint(0, 20)):
-                userActivityRandom(TOPIC_USER_SUBSCRIBE, video[0], dateTime)
-            for dateTime in generateRandomTimeStr(dateValue, randint(0, 200)):
-                userActivityRandom(TOPIC_USER_COMMENT, video[0], dateTime)
-        
-        
-        
-videoMetadataETL()
+        startDate = "2010-01-01T00:00:00"
+        endDate = getTimestampNow()
+        for dateValue in getDateRangeList(startDate, endDate):
+            dataSet = []
+            for topic, value in topicRndSeedDict.items():
+                for dateTime in generateRandomTimeStr(dateValue, randint(0, value)):
+                    dataSet.append(userActivityRandom(topic, vid=video[0], cid=video[1],
+                                caid=video[2], dateStr=dateTime))
+            flush2HDFS('\n'.join(dataSet), dateStr='MASTERDATA')
+            count = count + 1
+            print '----', count
+        update(DB_NAME, DB_TB_VIDEO, ['useractivityflag'], ['id'], [{'useractivityflag':'N', 'id':video[0]}])
+
+userActivityETL()              
+                
