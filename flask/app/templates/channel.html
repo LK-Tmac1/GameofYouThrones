@@ -1,45 +1,99 @@
-{% extends "header.html" %} {% block video %}
-<div id="page-wrapper">
-	<form role="form" method="post">
-		<div class="col-xs-4">
-			<input class="form-control" id="ex3" name='channelkeyword'
-				type="text" placeholder='Search channel by ID or name'>
+{% extends "header.html" %} {% block channel %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-3 col-md-2 sidebar">
+			<ul class="nav nav-sidebar">
+				<li class="active"><a href="channel">Channel<span
+						class="sr-only">(current)</span></a></li>
+				<li><a href="video">Video</a></li>
+				<li><a href="category">Category</a></li>
+				<li><a href="http://bit.ly/1L05xLS">Slide</a></li>
+				<li><a href="http://bit.ly/1Mnih1F">My LinkedIn</a></li>
+			</ul>
 		</div>
-		<button type="submit" class="btn btn-default" value='search'>Search</button>
-	</form>
-	<br>
-	<div class="col-lg-3">
-		<select> {% for channel in channelList %}
-			<option>{{ channel.title }}</option> {% endfor %}
-		</select> <br>
-		<div>
-			<select>
-				<option>View</option>
-				<option>Like</option>
-				<option>Comment</option>
-				<option>Share</option>
-				<option>Subscribe</option>
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<h1 class="page-header">Dashboard</h1>
+			<form role="form" method="get">
+				<div>
+					<input style="width: 300px;" name='channelkeyword' type="text"
+						placeholder='Search channels by name'>
+					<button type="submit" value='search'>Search</button>
+
+				</div>
+			</form>
+			<h2>Select a channel</h2>
+			<select style="width: 300;"> {% for channel in channelList%}
+				<option>{{ channel.title }}</option> {% endfor %}
 			</select>
+			<h2 class="sub-header">User activity filter</h2>
+
+			<div class='useractivityfilter'>
+				<select id='activitytype'>
+					<option>View</option>
+					<option>Like</option>
+					<option>Comment</option>
+					<option>Share</option>
+					<option>Subscribe</option>
+				</select> <select id='topn'>
+					<option>Top 1</option>
+					<option>Top 5</option>
+					<option>Top 10</option>
+				</select> <select id='daterange'>
+					<option>Yesterday</option>
+					<option>Last 3 days</option>
+					<option>Last 7 days</option>
+					<option>Last 15 days</option>
+					<option>Last 30 days</option>
+					<option>Last 60 days</option>
+				</select>
+			</div>
+
+
+
+
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Header</th>
+							<th>Header</th>
+							<th>Header</th>
+							<th>Header</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1,001</td>
+							<td>Lorem</td>
+							<td>ipsum</td>
+							<td>dolor</td>
+							<td>sit</td>
+						</tr>
+						<tr>
+							<td>1,015</td>
+							<td>sodales</td>
+							<td>ligula</td>
+							<td>in</td>
+							<td>libero</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
-		<select>
-			<option>Last 3 days</option>
-			<option>Last 7 days</option>
-			<option>Last 15 days</option>
-			<option>Last 30 days</option>
-			<option>Last 60 days</option>
-		</select>
 	</div>
-	
-	<div>
-	<form role="form" method="get">
-		<button type="submit" class="btn btn-default" value='search'>Submit</button>
-	</form>
-	</div>
-	<!-- /#page-wrapper -->
 </div>
-</div>
-<!-- /#wrapper -->
-</div>
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="../static/js/bootstrap/bootstrap.min.js"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="../static/js/bootstrap/holder.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../static/js/bootstrap/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>
 {% endblock %}

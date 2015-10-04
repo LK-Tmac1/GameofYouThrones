@@ -10,7 +10,7 @@ def channel():
     return render_template("channel.html", title='Channel')
 
 
-@app.route('/channel', methods=['POST'])
+@app.route('/channel', methods=['GET'])
 def channel_search():
     keyword = request.form["channelkeyword"].strip()
     keyword = 'youtube' if keyword == ''  else keyword
