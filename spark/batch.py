@@ -48,7 +48,7 @@ def getDailyAccuSumRDD(hourlyAccuRDD):
     dailyAccuRDD = dailyAccuRDD.flatMap(lambda x:calculateAccuSum(x[0], x[1]))
     return dailyAccuRDD
 
-dataRDD = loadDataFromHDFS('2015-09-27', '../sample.txt')
+dataRDD = loadDataFromHDFS('2015-09-27', '../../data/2015-09-28.txt')
 for item in dataRDD.collect():
     print item
 """
