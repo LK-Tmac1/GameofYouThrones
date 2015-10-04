@@ -28,7 +28,7 @@ def parseUseractivityRDD(mode, dataTupleList):
         columnQualifer = useractivity + modeColumnSuffixDict[mode] + ':' + uadatetime
         if rowkey not in dataDictMap:
             dataDictMap[rowkey] = {}
-        dataDictMap[rowkey][columnQualifer] = dataTuple[1]
+        dataDictMap[rowkey][columnQualifer] = str(dataTuple[1])
     return dataDictMap
 
 def putToHBase(mode, dataRDD):
@@ -41,6 +41,7 @@ def putToHBaseBatch(filePath):
     hourlyAccuRDD = getHourlyAccuSumRDD(hourlyRDD)
     dailyRDD = getDailyRDD(hourlyRDD)
     dailyAccuRDD = getDailyAccuSumRDD(hourlyAccuRDD)
+    print "Saving---------"
     putToHBase(MODE_HOURLY, hourlyRDD)
     putToHBase(MODE_HOURLY_ACCU, hourlyAccuRDD)
     putToHBase(MODE_DAILY, dailyRDD)
@@ -48,6 +49,6 @@ def putToHBaseBatch(filePath):
     print "Done====="
     
     
-
-filePath = '/Users/Kun/Git/GameofYouThrones/spark/sample/input.txt'
-putToHBase(filePath)       
+#filePath = '/Users/Kun/Git/GameofYouThrones/spark/sample/input.txt'
+filePath = '/home/ubuntu/project/sample.txt'
+putToHBaseBatch(filePath)       

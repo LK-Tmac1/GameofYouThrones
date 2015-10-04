@@ -52,4 +52,4 @@ def sample():
     dailyAccuRDD.saveAsTextFile(filePath + "/output-daily-accu")
     print "------Done"
 
-sample()
+#sample()
