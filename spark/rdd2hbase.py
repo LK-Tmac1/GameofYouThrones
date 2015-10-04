@@ -6,8 +6,8 @@ from hbase.hbdao import putUseractivityStat
 
 
 modeColumnSuffixDict = {
-        MODE_HOURLY:'_hourly', MODE_HOURLY_ACCU:'_hourly_accu',
-        MODE_DAILY:'_daily', MODE_DAILY_ACCU:'_daily_accu'}
+        MODE_HOURLY:'_hourly', MODE_HOURLY_ACCU:'_hourly_accum',
+        MODE_DAILY:'_daily', MODE_DAILY_ACCU:'_daily_accum'}
 
 def parseUseractivityRDD(mode, dataTuple):
     # Each dataList element will be a dict, where the key is the column qualifier

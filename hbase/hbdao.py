@@ -18,7 +18,7 @@ def putUseractivityStat(dataTupleList):
         for data in dataTuple[1]:
             dataDict[data[0]] = data[1]
         table.put(rowKey, dataDict)
-        print rowKey, dataDict
+        print rowKey
 
 def scanDataByRowPrefix(prefix, columnFamilyMember=[]):
     dataDictList = [{}]
@@ -29,5 +29,5 @@ def scanDataByRowPrefix(prefix, columnFamilyMember=[]):
     return rows
 
         
-# DsuxXH8Q76o
-# print scanDataByRowPrefix('v_', ['userview_hourly_aggre'])
+# video_K_mpQtzFjC4
+print scanDataByRowPrefix('video_K_mpQtzFjC4', ['userview_hourly_accum'])
