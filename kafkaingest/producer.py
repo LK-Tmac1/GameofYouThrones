@@ -22,4 +22,4 @@ def userActivityRandom(topic, vid='', cid='', caid='', dateStr=''):
     dataList.append(cid if cid != '' else 'ch_rnd' + str(randint(1, 10000)))
     dataList.append(vid if vid != '' else 'v_rnd' + str(randint(1, 100000)))
     dataList.append(topic)
-    return DE_USER_ACTIVITY_DELIMITER.join(dataList)
+    return DE_USER_ACTIVITY_DELIMITER.join(dataList) + '\n'

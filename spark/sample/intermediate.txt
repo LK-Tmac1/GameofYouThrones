@@ -1,0 +1,33 @@
+map, reduce, sort
+userview:video_1:2015-09-28T12:30 1
+userview:video_1:2015-09-28T13:30 2
+userview:video_1:2015-09-28T17:30 1
+userview:video_1:2015-09-29T14:30 1
+userview:video_1:2015-09-29T16:30 1
+userview:video_1:2015-09-30T11:30 1
+userview:video_1:2015-09-30T16:30 1
+
+1. accumulative sum of hourly
+userview:video_1:2015-09-29 [u'T14:30_1', u'T16:30_1']
+userview:video_1:2015-09-30 [u'T11:30_1', u'T16:30_1']
+userview:video_1:2015-09-28 [u'T12:30_1', u'T13:30_2', u'T17:30_1']
+output, if sorted by key
+userview:video_1:2015-09-28T12:30 1
+userview:video_1:2015-09-28T13:30 3
+userview:video_1:2015-09-28T17:30 4
+userview:video_1:2015-09-29T14:30 1
+userview:video_1:2015-09-29T16:30 2
+userview:video_1:2015-09-30T11:30 1
+userview:video_1:2015-09-30T16:30 2
+
+2. accumulative sum of daily
+(u'userview:video_1:2015-09-28’, 8)
+(u'userview:video_1:2015-09-29’, 3)
+(u'userview:video_1:2015-09-30’, 3)
+
+(u'userview:video_1’, ‘:2015-09-28_8’)
+
+output:
+userview:video_1:2015-09-28 8
+userview:video_1:2015-09-29 11
+userview:video_1:2015-09-30 14

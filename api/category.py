@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from client import getJSONData
-from etl.mysqldao import insert
+from mysql.mysqldao import insert
 from utility.constant import DB_NAME, DB_TB_CATEGORY
 
 def saveAllCategory():

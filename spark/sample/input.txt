@@ -1,0 +1,6 @@
+2015-09-30T16:40:00Z category_1 channel_1 video_1 userview
+2015-09-30T16:50:00Z category_2 channel_2 video_2 userview
+2015-09-30T16:43:00Z category_1 channel_1 video_1 userlike
+2015-09-30T16:45:00Z category_1 channel_1 video_1 userview
+2015-09-30T15:40:00Z category_1 channel_1 video_3 userview
+2015-09-29T11:40:00Z category_2 channel_2 video_2 usersubscribe

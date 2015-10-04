@@ -1,22 +1,12 @@
 from pyspark.context import SparkContext, SparkConf
-from utility.constant import HDFS_MASTER_DNS, HDFS_DEFAULT_PATH, FILE_TYPE
-from utility.helper import parseDateString, getTimestampNow
 from transform import transformActivity, transformHourlyToDailyKey, \
         calculateAccuSum, parseTempKeyValueForAccu
- 
-conf = SparkConf().setAppName("testBatch")
+
+conf = SparkConf().setAppName("masterBatch")
 sc = SparkContext(conf=conf)
 
-def loadDataFromHDFS(dateStr, filePath=None):
-    dateStr = str(parseDateString(dateStr))
-    if dateStr == '':
-        dateStr = str(parseDateString(getTimestampNow()))
-    if filePath is None:
-        filePath = HDFS_MASTER_DNS + HDFS_DEFAULT_PATH + '/' + dateStr + FILE_TYPE
+def loadDataFromPath(filePath):
     data = sc.textFile(filePath)
-    for line in data.collect():
-        if len(line.strip(' \t\n\r')) > 0:
-            print len(line)
     data.filter(lambda line: len(line.strip(' \t\n\r')) > 0)
     return data
     
@@ -48,18 +38,14 @@ def getDailyAccuSumRDD(hourlyAccuRDD):
     dailyAccuRDD = dailyAccuRDD.flatMap(lambda x:calculateAccuSum(x[0], x[1]))
     return dailyAccuRDD
 
-dataRDD = loadDataFromHDFS('2015-09-27', '../../data/2015-09-28.txt')
-print dataRDD.first()
-"""
-dataRDD = loadDataFromHDFS('2015-09-27', 'sample_user_activity2.txt')
-hourlyRDD = getHourlyRDD(dataRDD)
-dailyRDD = getDailyRDD(hourlyRDD)
-hourlyAccuRDD = getHourlyAccuSumRDD(hourlyRDD)
-dailyAccuRDD = getDailyAccuSumRDD(hourlyAccuRDD)
-hourlyRDD.saveAsTextFile("output-hourly.txt")
-dailyRDD.saveAsTextFile("output-daily.txt")
-hourlyAccuRDD.saveAsTextFile("output-hourly-accu.txt")
-dailyAccuRDD.saveAsTextFile("output-daily-accu.txt")
-
-print "------"
-"""
+def sample():
+    dataRDD = loadDataFromPath('./sample/input.txt')
+    hourlyRDD = getHourlyRDD(dataRDD)
+    dailyRDD = getDailyRDD(hourlyRDD)
+    hourlyAccuRDD = getHourlyAccuSumRDD(hourlyRDD)
+    dailyAccuRDD = getDailyAccuSumRDD(hourlyAccuRDD)
+    hourlyRDD.saveAsTextFile("./sample/output-hourly")
+    dailyRDD.saveAsTextFile("./sample/output-daily")
+    hourlyAccuRDD.saveAsTextFile("./sample/output-hourly-accu")
+    dailyAccuRDD.saveAsTextFile("./sample/output-daily-accu")
+    print "------Done"

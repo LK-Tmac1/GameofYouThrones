@@ -1,4 +1,6 @@
 from utility.helper import parseDateString, parseDateTimeMinute
+from utility.constant import  HB_CATEGORY_PREFIX, \
+HB_CHANNEL_PREFIX, HB_VIDEO_PREFIX
 
 def parseTempKeyValueForAccu(K, V, hourly):
     if hourly:
@@ -37,13 +39,13 @@ def transformActivity(line, hourly=False):
     itemList = line.split(' ')
     if len(itemList) >= 5:
         timestamp = parseDateTimeMinute(itemList[0]) if hourly else str(parseDateString(itemList[0]))
-        categoryId = itemList[1]
-        channelId = itemList[2]
-        videoId = itemList[3]
+        categoryId = HB_CATEGORY_PREFIX + itemList[1]
+        channelId = HB_CHANNEL_PREFIX + itemList[2]
+        videoId = HB_VIDEO_PREFIX + itemList[3]
         useractivity = itemList[4]
-        categoryVideoId = categoryId + ":" + videoId
-        channelVideoId = channelId + ":" + videoId
-        categoryChannelId = categoryId + ":" + channelId
+        categoryVideoId = '%s:%s' % (categoryId, videoId)
+        channelVideoId = '%s:%s' % (channelId, videoId)
+        categoryChannelId = '%s:%s' % (categoryId, channelId)
         prefix_suffix = useractivity + ':%s:' + timestamp
         videoRow = prefix_suffix % videoId
         channelRow = prefix_suffix % channelId

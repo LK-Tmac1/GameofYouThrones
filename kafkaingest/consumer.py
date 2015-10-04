@@ -14,11 +14,11 @@ def dataConsumer(topic, group='default', count=1, dateStr=''):
         dataList.append(message.message.value)
     if len(dataList) > 0:
         flush2HDFS(dataList, dateStr)
-    
-def flush2Local(dataSet):
-    tempfile = open("/home/ubuntu/project/data/sample.txt", "a")  # append mode
+
+def flush2Local(batchNum, dataSet):
+    tempfile = open('../sample' + str(batchNum) + '.txt', "a")  # append mode
     tempfile.write(dataSet)
-    tempfile.close()
+    # tempfile.close()
     
 def flush2HDFS(dataSet, dateStr=''):
     dateStr = parseDateString(dateStr)
