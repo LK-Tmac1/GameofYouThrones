@@ -1,4 +1,4 @@
-from utility.constant import COMP_KEY_DELIMITER, HB_CATEGORY_PREFIX \
+from utility.constant import COMP_KEY_DELIMITER, HB_CATEGORY_PREFIX, \
 HB_CHANNEL_PREFIX, HB_VIDEO_PREFIX
 
 
