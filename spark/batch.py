@@ -49,8 +49,9 @@ def getDailyAccuSumRDD(hourlyAccuRDD):
     return dailyAccuRDD
 
 dataRDD = loadDataFromHDFS('2015-09-27', '../sample.txt')
-for item in dataRDD.collect():
-    print item
+print dataRDD.first()
+#for item in dataRDD.collect():
+#    print item
 """
 dataRDD = loadDataFromHDFS('2015-09-27', 'sample_user_activity2.txt')
 hourlyRDD = getHourlyRDD(dataRDD)
