@@ -1,6 +1,7 @@
 from spark.batch import loadDataFromPath, getDailyAccuSumRDD, getDailyRDD, \
     getHourlyAccuSumRDD, getHourlyRDD
-from utility.constant import MODE_HOURLY_ACCU, MODE_HOURLY, MODE_DAILY_ACCU, MODE_DAILY
+from utility.constant import MODE_HOURLY_ACCU, MODE_HOURLY, MODE_DAILY_ACCU, MODE_DAILY, \
+    HDFS_MASTER_DNS, HDFS_DEFAULT_PATH
 from hbase.hbdao import putUseractivityStat
 
 
@@ -47,6 +48,7 @@ def putToHBaseBatch(filePath):
     print "Done====="
     
     
-filePath = '/Users/Kun/Git/GameofYouThrones/spark/sample/input.txt'
+# filePath = '/Users/Kun/Git/GameofYouThrones/spark/sample/input.txt'
 # filePath = '/home/ubuntu/project/sample.txt'
+filePath = HDFS_MASTER_DNS + HDFS_DEFAULT_PATH + '/sample.txt'
 putToHBaseBatch(filePath)       
