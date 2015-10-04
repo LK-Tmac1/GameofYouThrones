@@ -18,7 +18,7 @@ def parseDateTimeMinute(timestamp):
 def parseDateString(dateStr):
     # Should be in the format of "2015-9-15T12:00:02.0Z"
     if len(str(dateStr)) < 11:
-        return ''
+        return dateStr
     year = int(dateStr[0:dateStr.find('-')])
     month = int(dateStr[dateStr.find('-') + 1:dateStr.rfind('-')])
     day = int(dateStr[dateStr.rfind('-') + 1:dateStr.find('T')])

@@ -14,7 +14,10 @@ def loadDataFromHDFS(dateStr, filePath=None):
     if filePath is None:
         filePath = HDFS_MASTER_DNS + HDFS_DEFAULT_PATH + '/' + dateStr + FILE_TYPE
     data = sc.textFile(filePath)
-    data.filter(lambda line: line.strip(' \t\n\r') != '')
+    for line in data.collect():
+        if len(line.strip(' \t\n\r')) > 0:
+            print len(line)
+    data.filter(lambda line: len(line.strip(' \t\n\r')) > 0)
     return data
     
 def getHourlyRDD(dataRDD):
@@ -45,6 +48,9 @@ def getDailyAccuSumRDD(hourlyAccuRDD):
     dailyAccuRDD = dailyAccuRDD.flatMap(lambda x:calculateAccuSum(x[0], x[1]))
     return dailyAccuRDD
 
+dataRDD = loadDataFromHDFS('2015-09-27', '../sample.txt')
+for item in dataRDD.collect():
+    print item
 """
 dataRDD = loadDataFromHDFS('2015-09-27', 'sample_user_activity2.txt')
 hourlyRDD = getHourlyRDD(dataRDD)
