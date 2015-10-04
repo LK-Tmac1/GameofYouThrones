@@ -33,16 +33,7 @@ def flush2HDFS(dataSet, dateStr=''):
         os.mknod(localFilePath)
     else:
         os.system("hdfs dfs -rm %s " % (hdfsPath))
-<<<<<<< HEAD
-    tempfile = open("/Users/Kun/Git/GameofYouThrones/sample.txt", "a")  # append mode
-=======
     tempfile = open(localFilePath, "a")  # append mode
->>>>>>> 81c19ff1c6eb114a00e9759047e6422d600cdb28
     tempfile.write(dataSet)
     os.system("hdfs dfs -put -f %s %s" % (localFilePath, hdfsPath))
-    tempfile.close()
-
-def flush2Local(dataSet):
-    tempfile = open("/home/ubuntu/project/GameofYouThrones/sample.txt", "a")  # append mode
-    tempfile.write(dataSet)
     tempfile.close()
