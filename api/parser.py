@@ -1,7 +1,4 @@
-#!/usr/bin/python
-
 from utility.helper import transformListToString, parseVIdByImageURL
-from api.client import getJSONData
 
 def parseChannelJSON(JSONData, categoryId='', channelList=None):
     if channelList is None:

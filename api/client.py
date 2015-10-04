@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 from utility.constant import API_HOME, API_KEY
 import requests
 import json

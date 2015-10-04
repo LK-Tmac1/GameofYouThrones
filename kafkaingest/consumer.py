@@ -14,26 +14,26 @@ def dataConsumer(topic, group='default', count=1, dateStr=''):
     dataList = []
     for message in messages:
         dataList.append(message.message.value)
-    print "----", len(dataList)
     if len(dataList) > 0:
-        flush2HDFS(topic, dataList, dateStr)
+        flush2HDFS(dataList, dateStr)
     
-def flush2HDFS(topic, dataSet, dateStr=''):
+def flush2HDFS(dataSet, dateStr=''):
     dateStr = parseDateString(dateStr)
     if dateStr == "":
         dateStr = parseDateString(getTimestampNow())
-    localPath = LOCAL_TEMP_PATH + '/' + topic
+    localPath = LOCAL_TEMP_PATH + "/"
     localFilePath = localPath + "/" + str(dateStr) + FILE_TYPE
-    hdfsPath = HDFS_DEFAULT_PATH + '/' + topic
+    hdfsPath = HDFS_DEFAULT_PATH + '/'
     if not os.path.exists(localPath):
         os.system('sudo mkdir ' + localPath)
     if not os.path.exists(localFilePath):
         os.mknod(localFilePath)
     else:
-        os.remove(localFilePath) 
-        os.system("hdfs dfs -rm %s " % (hdfsPath))
+        print "--"
+        #os.system("hdfs dfs -rm %s " % (hdfsPath))
     tempfile = open(localFilePath, "w")
     for data in dataSet:
         tempfile.write(data + "\n")
-    os.system("hdfs dfs -put -f %s %s" % (localFilePath, hdfsPath))
+    #os.system("hdfs dfs -put -f %s %s" % (localFilePath, hdfsPath))
+    tempfile.close()
 

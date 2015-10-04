@@ -1,5 +1,5 @@
 import happybase
-from integrate.mysqldao import update
+from etl.mysqldao import update
 from utility.constant import HB_TB_MASTER, MODE_STAT_HOURLY_ACCU, \
     MODE_STAT_HOURLY, MODE_STAT_DAILY_ACCU, MODE_STAT_DAILY, \
     HB_VIDEO_METADATA_LIST, DB_NAME, DB_TB_VIDEO

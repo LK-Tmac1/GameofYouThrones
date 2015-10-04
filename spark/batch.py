@@ -45,6 +45,7 @@ def getDailyAccuSumRDD(hourlyAccuRDD):
     dailyAccuRDD = dailyAccuRDD.flatMap(lambda x:calculateAccuSum(x[0], x[1]))
     return dailyAccuRDD
 
+"""
 dataRDD = loadDataFromHDFS('2015-09-27', 'sample_user_activity2.txt')
 hourlyRDD = getHourlyRDD(dataRDD)
 dailyRDD = getDailyRDD(hourlyRDD)
@@ -56,3 +57,4 @@ hourlyAccuRDD.saveAsTextFile("output-hourly-accu.txt")
 dailyAccuRDD.saveAsTextFile("output-daily-accu.txt")
 
 print "------"
+"""

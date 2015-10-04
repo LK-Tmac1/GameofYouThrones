@@ -10,11 +10,11 @@ def dataProducer(topic, msg):
     producer = SimpleProducer(KafkaClient(MasterPublicIP + ":9092"))
     producer.send_messages(topic, str(msg).encode('utf-8'))
 
-def produceUserActivity(topic=TOPIC_USER_VIEW, useractivityList):
+def produceUserActivity(topic, useractivityList):
     # Produce user activity data for a given video on a given date
     dataProducer(topic, '\n'.join(useractivityList))
 
-def userActivityRandom(topic=TOPIC_USER_VIEW, vid='', cid='', caid='', dateStr=''):
+def userActivityRandom(topic, vid='', cid='', caid='', dateStr=''):
     dataList = []
     # Sample output: 2015-09-30T16:40:00Z category channel video userview
     dataList.append(dateStr if dateStr != '' else getTimestampNow())

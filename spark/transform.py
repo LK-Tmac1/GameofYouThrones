@@ -33,6 +33,7 @@ def calculateAccuSum(K, V):
 
 def transformActivity(line, hourly=False):
     # Sample line: 2015-09-30T16:40:00Z category channel video userview
+    # Sample output: userview:channel:video:2015-09-30T16:40:00Z
     itemList = line.split(' ')
     if len(itemList) >= 5:
         timestamp = parseDateTimeMinute(itemList[0]) if hourly else str(parseDateString(itemList[0]))

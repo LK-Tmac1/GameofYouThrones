@@ -1,9 +1,8 @@
-#!/usr/bin/python
 
 from client import getJSONData
 from utility.constant import  DB_NAME, DB_TB_CHANNEL, DB_TB_CATEGORY
 from api.parser import parseChannelJSON
-from integrate.mysqldao import insert, select, update
+from etl.mysqldao import insert, select, update
  
     
 def saveChannelByCategory(categoryId):

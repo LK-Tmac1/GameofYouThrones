@@ -3,7 +3,7 @@
 from client import getJSONData
 from api.parser import parsePlaylistJSON
 from utility.constant import DB_NAME, DB_TB_CHANNEL, DB_TB_PLAYLIST, DB_TB_VIDEO, MAX_RESULT
-from integrate.mysqldao import update, insert, select, execute_query
+from etl.mysqldao import update, insert, select, execute_query
 from video import getVideoByIdList
 
 def savePlaylistByChannel(channelId):
