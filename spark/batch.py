@@ -39,13 +39,17 @@ def getDailyAccuSumRDD(hourlyAccuRDD):
     return dailyAccuRDD
 
 def sample():
-    dataRDD = loadDataFromPath('./sample/input.txt')
+    filePath = ""
+    dataRDD = loadDataFromPath(filePath + 'sample100.txt')
     hourlyRDD = getHourlyRDD(dataRDD)
     dailyRDD = getDailyRDD(hourlyRDD)
     hourlyAccuRDD = getHourlyAccuSumRDD(hourlyRDD)
     dailyAccuRDD = getDailyAccuSumRDD(hourlyAccuRDD)
-    hourlyRDD.saveAsTextFile("./sample/output-hourly")
-    dailyRDD.saveAsTextFile("./sample/output-daily")
-    hourlyAccuRDD.saveAsTextFile("./sample/output-hourly-accu")
-    dailyAccuRDD.saveAsTextFile("./sample/output-daily-accu")
+    print "======Saving files..."
+    hourlyRDD.saveAsTextFile(filePath + "/output-hourly")
+    dailyRDD.saveAsTextFile(filePath + "/output-daily")
+    hourlyAccuRDD.saveAsTextFile(filePath + "/output-hourly-accu")
+    dailyAccuRDD.saveAsTextFile(filePath + "/output-daily-accu")
     print "------Done"
+
+sample()
