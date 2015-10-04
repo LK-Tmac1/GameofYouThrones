@@ -17,7 +17,7 @@ def userActivityGenerate(startDate=''):
     count = 0
     batchNum = 100
     for video in videoList:
-        startDate = "2015-06-01T00:00:00"
+        startDate = "2015-07-01T00:00:00"
         endDate = getTimestampNow()
         for dateValue in getDateRangeList(startDate, endDate):
             dataSet = []
@@ -29,7 +29,8 @@ def userActivityGenerate(startDate=''):
         count = count + 1
         print '----', count
         update(DB_NAME, DB_TB_VIDEO, ['useractivityflag'], ['id'], [{'useractivityflag':'Y', 'id':video[0]}])
-        if count > 1200:
+        if count > 100:
+            break
             batchNum = batchNum + 1
             count = 0
             

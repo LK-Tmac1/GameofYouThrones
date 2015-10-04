@@ -4,14 +4,21 @@ from utility.constant import HB_TB_MASTER
 connection = happybase.Connection('localhost')    
 connection.open()
 
-def putUseractivityStat(dataDictMap):
+def putUseractivityStat(dataTupleList):
     """
-    :dataDictMap a map of dict; the key is the row key, the value is a dict, with
-                 column qualifier as the key, and number of activity as the value
+    :dataTupleList a list of tuple; in each tuple, the first element is the row key,
+                   the second element is another tuple, where the first element is the
+                   column qualifer, say 'userview_hourly:2015-09-30T16:30', and the value
+                   is the number of activity, say '2'
     """
     table = connection.table(HB_TB_MASTER)
-    for dataKey, dataDict in dataDictMap.items():
-        table.put(dataKey, dataDict)
+    for dataTuple in dataTupleList:
+        rowKey = dataTuple[0]
+        dataDict = {}
+        for data in dataTuple[1]:
+            dataDict[data[0]] = data[1]
+        table.put(rowKey, dataDict)
+        print rowKey, dataDict
 
 def scanDataByRowPrefix(prefix, columnFamilyMember=[]):
     dataDictList = [{}]

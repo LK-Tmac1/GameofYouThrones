@@ -8,33 +8,31 @@ modeColumnSuffixDict = {
         MODE_HOURLY:'_hourly', MODE_HOURLY_ACCU:'_hourly_accu',
         MODE_DAILY:'_daily', MODE_DAILY_ACCU:'_daily_accu'}
 
-def parseUseractivityRDD(mode, dataTupleList):
-    # Each dataDictMap element will be a dict, where the key is the column qualifier
+def parseUseractivityRDD(mode, dataTuple):
+    # Each dataList element will be a dict, where the key is the column qualifier
     # and the value is the number of activity
-    dataDictMap = {}
-    for dataTuple in dataTupleList:
-        keyList = dataTuple[0].split(':')
-        useractivity = keyList[0]
-        uadatetime = ''
-        rowkey = keyList[1]
-        if mode == MODE_DAILY or mode == MODE_DAILY_ACCU:
-            uadatetime = keyList[len(keyList) - 1]
-            if len(keyList) == 4:
-                rowkey = rowkey + ':' + keyList[2]
-        elif mode == MODE_HOURLY or mode == MODE_HOURLY_ACCU:
-            uadatetime = keyList[len(keyList) - 2] + ':' + keyList[len(keyList) - 1]
-            if len(keyList) == 5:
-                rowkey = rowkey + ':' + keyList[2]
-        columnQualifer = useractivity + modeColumnSuffixDict[mode] + ':' + uadatetime
-        if rowkey not in dataDictMap:
-            dataDictMap[rowkey] = {}
-        dataDictMap[rowkey][columnQualifer] = str(dataTuple[1])
-    return dataDictMap
+    dataList = []
+    keyList = dataTuple[0].split(':')
+    useractivity = keyList[0]
+    uadatetime = ''
+    rowkey = keyList[1]
+    if mode == MODE_DAILY or mode == MODE_DAILY_ACCU:
+        uadatetime = keyList[len(keyList) - 1]
+        if len(keyList) == 4:
+            rowkey = rowkey + ':' + keyList[2]
+    elif mode == MODE_HOURLY or mode == MODE_HOURLY_ACCU:
+        uadatetime = keyList[len(keyList) - 2] + ':' + keyList[len(keyList) - 1]
+        if len(keyList) == 5:
+            rowkey = rowkey + ':' + keyList[2]
+    columnQualifer = useractivity + modeColumnSuffixDict[mode] + ':' + uadatetime
+    dataList.append(columnQualifer)
+    dataList.append(str(dataTuple[1]))
+    return (rowkey, tuple(dataList))
 
 def putToHBase(mode, dataRDD):
-    dataDictMap = parseUseractivityRDD(mode, dataRDD.collect())
-    putUseractivityStat(dataDictMap)
-
+    dataTupleList = dataRDD.map(lambda line : parseUseractivityRDD(mode, line)).groupByKey()
+    putUseractivityStat(dataTupleList.collect())
+    
 def putToHBaseBatch(filePath):
     dataRDD = loadDataFromPath(filePath)
     hourlyRDD = getHourlyRDD(dataRDD)
@@ -49,6 +47,6 @@ def putToHBaseBatch(filePath):
     print "Done====="
     
     
-#filePath = '/Users/Kun/Git/GameofYouThrones/spark/sample/input.txt'
-filePath = '/home/ubuntu/project/sample.txt'
+filePath = '/Users/Kun/Git/GameofYouThrones/spark/sample/input.txt'
+# filePath = '/home/ubuntu/project/sample.txt'
 putToHBaseBatch(filePath)       
