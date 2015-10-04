@@ -39,7 +39,7 @@ DE_USER_ACTIVITY_DELIMITER = ' '
 USER_ACTIVETY_MINUTE_UNIT = 30
 # HBase
 HB_VIDEO_METADATA_LIST = ['id', 'title', 'channelid', 'publishedat', 'description', 'imageurl', 'categoryid']
-HB_TB_MASTER = 'useractivity'
+HB_TB_MASTER = 'youtube'
 MODE_DAILY = 'MODE_DAILY'
 MODE_HOURLY = 'MODE_HOURLY'
 MODE_DAILY_ACCU = 'MODE_DAILY_ACCU'
