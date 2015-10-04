@@ -3,6 +3,7 @@ from etl.mysqldao import update
 from utility.constant import HB_TB_MASTER, MODE_STAT_HOURLY_ACCU, \
     MODE_STAT_HOURLY, MODE_STAT_DAILY_ACCU, MODE_STAT_DAILY, \
     HB_VIDEO_METADATA_LIST, DB_NAME, DB_TB_VIDEO
+from hbase.format import formatVideoId
 
 connection = happybase.Connection('localhost')    
 connection.open()
@@ -28,13 +29,12 @@ def putMetadata(videoTupleList):
     column_family = 'metadata:'
     for videoTuple in videoTupleList:
         columnData = {}
-        videoid = videoTuple[0]
+        videoid = formatVideoId(videoTuple[0])
         for i in xrange(1, len(HB_VIDEO_METADATA_LIST)):
             column_member = column_family + HB_VIDEO_METADATA_LIST[i]
-            columnData[column_member] = '' if videoTuple[i] is None else videoTuple[i].encode('utf-8')  # , 'ignore').decode('ascii')
-        print videoid, columnData[column_family + HB_VIDEO_METADATA_LIST[1]]
+            columnData[column_member] = '' if videoTuple[i] is None else videoTuple[i].encode('utf-8')
         videoStatTable.put(videoid, columnData)
-        update(DB_NAME, DB_TB_VIDEO, ['metadata'], ['id'], [{'id':videoid, 'metadata':'Y'}])
+        update(DB_NAME, DB_TB_VIDEO, ['metadata'], ['id'], [{'id':videoTuple[0], 'metadataFlag':'Y'}])
 
 def putUseractivityStat(mode, dataDictList):
     """
@@ -65,4 +65,4 @@ def scanDataByRowPrefix(prefix, columnFamilyMember=[]):
 
         
 # DsuxXH8Q76o
-print scanDataByRowPrefix('v_', ['userview_hourly_aggre'])
+#print scanDataByRowPrefix('v_', ['userview_hourly_aggre'])
