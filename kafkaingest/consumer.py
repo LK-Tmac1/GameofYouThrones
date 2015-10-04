@@ -16,7 +16,7 @@ def dataConsumer(topic, group='default', count=1, dateStr=''):
         flush2HDFS(dataList, dateStr)
     
 def flush2Local(dataSet):
-    tempfile = open("/home/ubuntu/project/GameofYouThrones/sample.txt", "a")  # append mode
+    tempfile = open("/home/ubuntu/project/data/sample.txt", "a")  # append mode
     tempfile.write(dataSet)
     tempfile.close()
     
