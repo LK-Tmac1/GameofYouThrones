@@ -10,11 +10,11 @@ def userActivityGenerate(startDate=''):
     videoList = select(DB_NAME, DB_TB_VIDEO, ['id', 'channelid', 'categoryid'],
                         ['useractivityflag'], [{'useractivityflag':'N'}])
     topicRndSeedDict = {
-          TOPIC_USER_VIEW:100,
-          TOPIC_USER_LIKE:10,
-          TOPIC_USER_SHARE:10,
-          TOPIC_USER_COMMENT:10,
-          TOPIC_USER_SUBSCRIBE:5}
+          TOPIC_USER_VIEW:20,
+          TOPIC_USER_LIKE:8,
+          TOPIC_USER_SHARE:8,
+          TOPIC_USER_COMMENT:6,
+          TOPIC_USER_SUBSCRIBE:6}
     count = 0
     batchNum = 100
     for video in videoList:
@@ -23,7 +23,7 @@ def userActivityGenerate(startDate=''):
         for dateValue in getDateRangeList(startDate, endDate, 1):
             dataSet = []
             for topic, value in topicRndSeedDict.items():
-                for dateTime in generateRandomTimeStr(dateValue, int(float(randint(1, 3) / 2) * randint(0, value))):
+                for dateTime in generateRandomTimeStr(dateValue, randint(1, value / 3) * randint(1, value)):
                     dataSet.append(userActivityRandom(topic, vid=video[0], cid=video[1],
                                 caid=video[2], dateStr=dateTime))
             flush2Local(batchNum, ''.join(dataSet))
