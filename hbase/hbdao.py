@@ -26,6 +26,7 @@ def scanDataByRowPrefix(prefix, columnFamilyMember=[]):
         # each row is a tuple, where the first element is the row key
         # and the second is an OrderedDict/Tuple of column:value
         # Example: ([('userview_hourly:2015-07-01T00:00', '4'), ('userview_hourly:2015-07-01T00:30', '8')...])
+
 """
 # video_K_mpQtzFjC4
 # video_GyKimbTbHjo

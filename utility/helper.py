@@ -24,6 +24,13 @@ def parseDateString(dateStr):
     day = int(dateStr[dateStr.rfind('-') + 1:dateStr.find('T')])
     return date(year, month, day)
 
+def getDateFromStart(startDateStr, offset, ago):
+    startDate = parseDateString(startDateStr)
+    if ago:
+        return startDate - td(days=offset)
+    else:
+        return startDate + td(days=offset)
+
 def getDateRangeList(dateStr1, dateStr2, offset=7):
     # Return a list of date between two dates, with offset as the range unit 
     date1 = parseDateString(dateStr1)
@@ -55,6 +62,7 @@ def transformListToString(strList):
 def getTimestampNow():
     strTimestamp = str(datetime.now()).replace(' ', 'T')
     return strTimestamp[0:strTimestamp.rfind(".")] + "Z"
+
 
 def generateRandomTimeStr(dateStr, count=1):
     timeList = []
