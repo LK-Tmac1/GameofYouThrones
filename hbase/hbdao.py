@@ -28,12 +28,10 @@ def scanDataByRowPrefix(prefix, columnFamilyMember=[]):
         # Example: [('userview_hourly:2015-07-01T00:00', '4'), ('userview_hourly:2015-07-01T00:30', '8')...]
 
 """
-# video_K_mpQtzFjC4
-# video_GyKimbTbHjo
-# channel_UCWLQqXdXHqzoJqu22QgMIlA:video_ODOROmPUXWQ
-# category_26:video_kZaf7D8SnnI
-# category_2:video_bVHEq1nccNQ
-# category_2:video_5cvdtUqN_RY
+channel__video__UCUpC8yomtIEfrTXLjk-wAmw:0aDXQKdxBO8
+video_ulfxHtVF8bg
+category__video__22:eXvsVwEEp1o
+channel_UCgMpNBkUc7tTsk_gr06d17g
 rows = scanDataByRowPrefix('video_K_mpQtzFjC4', ['userview_daily:2015-07-01',
                                                 'userview_daily:2015-10-01',
                                                 'userview_daily:2015-01-01'])
