@@ -6,6 +6,10 @@ from kafkaingest.producer import userActivityRandom
 from kafkaingest.consumer import flush2Local
 from random import randint
 
+def getRandomChannelID():
+    channelIdList = ['UCbEIp4Dn6qSepBpp7vWPUIQ', 'UCwwMcOpDNorLbDjhSaM8AZg', 'UCdMJU0WAzxaz8HUUmHtvL1w', 'h2gfaGp-lFjx5bBCtaw']
+    return channelIdList[randint(0, len(channelIdList) - 1)]
+
 def userActivityGenerate(startDate=''):
     videoList = select(DB_NAME, DB_TB_VIDEO, ['id', 'channelid', 'categoryid'],
                         ['useractivityflag'], [{'useractivityflag':'N'}])
@@ -35,4 +39,4 @@ def userActivityGenerate(startDate=''):
             batchNum = batchNum + 1
             count = 0
             
-userActivityGenerate()            
+# userActivityGenerate()            

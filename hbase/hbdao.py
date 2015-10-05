@@ -22,13 +22,11 @@ def putUseractivityStat(dataTupleList):
 
 def getDataByRowKeys(rowKeys, columns):
     rows = connection.table(HB_TB_MASTER).row(rowKeys, columns)
-    print "Rows done..."
     return rows
 
 def scanDataByRowPrefix(prefix, columnFamilyMember=[]):
     rows = connection.table(HB_TB_MASTER).scan(row_prefix=prefix, \
                 columns=columnFamilyMember, sorted_columns=True)
-    print 'Scan done...'
     return rows
         # each row is a tuple, where the first element is the row key
         # and the second is an OrderedDict/Tuple of column:value
