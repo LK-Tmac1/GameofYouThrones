@@ -34,4 +34,4 @@ def userActivityGenerate(startDate=''):
             batchNum = batchNum + 1
             count = 0
             
-userActivityGenerate()              
+#userActivityGenerate()              

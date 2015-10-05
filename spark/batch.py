@@ -51,5 +51,3 @@ def sample():
     hourlyAccuRDD.saveAsTextFile(filePath + "/output-hourly-accu")
     dailyAccuRDD.saveAsTextFile(filePath + "/output-daily-accu")
     print "------Done"
-
-#sample()
