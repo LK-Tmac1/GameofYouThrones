@@ -13,8 +13,8 @@ def queryVideoByChannel(channelid, topn, daterange, useractivity, mode):
     for dateStr in dateRangeList:
         columnQualiferList.append(columnQualifer + ":" + dateStr)
         columnQualiferAccumList.append(columnQualiferAccum + ":" + dateStr)
-    # rows = scanDataByRowPrefix(HB_CHANNEL_PREFIX + '_' + HB_VIDEO_PREFIX + '_', columnQualifer)
-    rowsAccum = scanDataByRowPrefix(HB_CHANNEL_PREFIX + '_' + HB_VIDEO_PREFIX + '_', columnQualiferAccum)
+    # rows = scanDataByRowPrefix(HB_CHANNEL_PREFIX +  HB_VIDEO_PREFIX , columnQualifer)
+    rowsAccum = scanDataByRowPrefix(HB_CHANNEL_PREFIX + HB_VIDEO_PREFIX, columnQualiferAccum)
     rndIndex = randint(0, len(rowsAccum) - topn)
     rowsAccum = rowsAccum[rndIndex:rndIndex + topn]
     for data in rowsAccum:
