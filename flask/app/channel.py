@@ -5,6 +5,7 @@ from api.client import getJSONData
 from api.parser import parseChannelJSON
 import urllib
 from hbase.query import queryVideoByChannel
+from utility.helper import getDateFromStart, getTimestampNow, getDateRangeList
 
 
 @app.route('/channel')
@@ -22,7 +23,12 @@ def channel_search():
         channelDataList = parseChannelJSON(channelJSON)
         return render_template("channel.html", channelList=channelDataList)
     else:
-        queryVideoByChannel(channeldid=request.form["channelid"], topn=request.form["topn"],
+        startDate = getTimestampNow()
+        endDate = str(getDateFromStart(str(startDate), int(request.form["daterange"]), True)) + 'T'
+        dateRangeList = getDateRangeList(startDate, endDate, offset=1)
+        resultTuple = queryVideoByChannel(channeldid=request.form["channelid"], topn=request.form["topn"],
                             activitytype=request.form["activitytype"], mode='_daily',
-                            daterange=request.form["daterange"])
+                            dateRangeList=dateRangeList)
+        print resultTuple[0], '\n======\n'
+        print resultTuple[1], '\n------\n'
         return render_template("home.html")

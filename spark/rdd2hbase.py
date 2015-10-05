@@ -50,4 +50,4 @@ def putToHBaseBatch(filePath):
 
 # filePath = '/Users/Kun/Git/GameofYouThrones/spark/sample/input.txt'
 # filePath = '/home/ubuntu/project/sample.txt'
-putToHBaseBatch(HDFS_MASTER_DNS + HDFS_DEFAULT_PATH + '/sample.txt')
+#putToHBaseBatch(HDFS_MASTER_DNS + HDFS_DEFAULT_PATH + '/sample.txt')

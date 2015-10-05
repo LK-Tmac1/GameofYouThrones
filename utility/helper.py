@@ -27,9 +27,9 @@ def parseDateString(dateStr):
 def getDateFromStart(startDateStr, offset, ago):
     startDate = parseDateString(startDateStr)
     if ago:
-        return startDate - td(days=offset)
+        return startDate - td(days=int(offset))
     else:
-        return startDate + td(days=offset)
+        return startDate + td(days=int(offset))
 
 def getDateRangeList(dateStr1, dateStr2, offset=7):
     # Return a list of date between two dates, with offset as the range unit 

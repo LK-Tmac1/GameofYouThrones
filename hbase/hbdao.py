@@ -28,15 +28,9 @@ def scanDataByRowPrefix(prefix, columnFamilyMember=[]):
         # Example: [('userview_hourly:2015-07-01T00:00', '4'), ('userview_hourly:2015-07-01T00:30', '8')...]
 
 """
-channel__video__UCUpC8yomtIEfrTXLjk-wAmw:0aDXQKdxBO8
+category_video_2:R2JU2gIpWd0
 video_ulfxHtVF8bg
 category__video__22:eXvsVwEEp1o
 channel_UCgMpNBkUc7tTsk_gr06d17g
-rows = scanDataByRowPrefix('video_K_mpQtzFjC4', ['userview_daily:2015-07-01',
-                                                'userview_daily:2015-10-01',
-                                                'userview_daily:2015-01-01'])
-for row in rows:
-    for i in row:
-        print i                                                
-print "====="
+rows = scanDataByRowPrefix('video_K_mpQtzFjC4', ['userview_daily:2015-07-01'])
 """
