@@ -23,16 +23,16 @@ def userActivityGenerate(startDate=''):
         for dateValue in getDateRangeList(startDate, endDate, 1):
             dataSet = []
             for topic, value in topicRndSeedDict.items():
-                for dateTime in generateRandomTimeStr(dateValue, int(float(randint(0, 2) / 2) * randint(0, value))):
+                for dateTime in generateRandomTimeStr(dateValue, int(float(randint(1, 3) / 2) * randint(0, value))):
                     dataSet.append(userActivityRandom(topic, vid=video[0], cid=video[1],
                                 caid=video[2], dateStr=dateTime))
             flush2Local(batchNum, ''.join(dataSet))
         count = count + 1
         print '----', count
         update(DB_NAME, DB_TB_VIDEO, ['useractivityflag'], ['id'], [{'useractivityflag':'Y', 'id':video[0]}])
-        if count > 549:
+        if count > 149:
             break
             batchNum = batchNum + 1
             count = 0
             
-#userActivityGenerate()              
+#userActivityGenerate()            

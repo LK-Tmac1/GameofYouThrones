@@ -7,7 +7,6 @@ import urllib
 from hbase.query import queryVideoByChannel
 from utility.helper import getDateFromStart, getTimestampNow, getDateRangeList
 
-
 @app.route('/channel')
 def channel():
     return render_template("channel.html", title='Channel')
@@ -26,8 +25,8 @@ def channel_search():
         startDate = getTimestampNow()
         endDate = str(getDateFromStart(str(startDate), int(request.form["daterange"]), True)) + 'T'
         dateRangeList = getDateRangeList(startDate, endDate, offset=1)
-        resultTuple = queryVideoByChannel(channeldid=request.form["channelid"], topn=request.form["topn"],
-                            activitytype=request.form["activitytype"], mode='_daily',
+        resultTuple = queryVideoByChannel(channelid=request.form["channelid"], topn=request.form["topn"],
+                            useractivity=request.form["activitytype"], mode='_daily',
                             dateRangeList=dateRangeList)
         print resultTuple[0], '\n======\n'
         print resultTuple[1], '\n------\n'
