@@ -30,9 +30,9 @@ def userActivityGenerate(startDate=''):
         count = count + 1
         print '----', count
         update(DB_NAME, DB_TB_VIDEO, ['useractivityflag'], ['id'], [{'useractivityflag':'Y', 'id':video[0]}])
-        if count > 149:
+        if count > 99:
             break
             batchNum = batchNum + 1
             count = 0
             
-#userActivityGenerate()            
+userActivityGenerate()            
