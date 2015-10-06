@@ -6,6 +6,27 @@ from kafkaingest.producer import userActivityRandom
 from kafkaingest.consumer import flush2Local
 from random import randint
 
+topicRndSeedDict = {
+          TOPIC_USER_VIEW:20,
+          TOPIC_USER_LIKE:8,
+          TOPIC_USER_SHARE:8,
+          TOPIC_USER_COMMENT:6,
+          TOPIC_USER_SUBSCRIBE:2}
+
+def getRandomValueList(count, useractivity, mode):
+    value = topicRndSeedDict[useractivity]
+    dataList = []
+    offset = 1
+    if mode != '_hourly':
+        offset = 2 * randint(0, topicRndSeedDict[useractivity])
+    for i in xrange(0, count):
+        dataList.append(randint(0, value / 2) * randint(1, value) + randint(0, offset))
+    dataAccumList = range(0, count)
+    dataAccumList[0] = dataAccumList[0] + randint(20, 100 * (offset + 1))
+    for i in xrange(1, count):
+        dataAccumList[i] = dataAccumList[i - 1] + dataList[i]
+    return (dataList, dataAccumList)
+    
 def getRandomVideoId():
     videoIdList = ['kf85BiUmMk8', 'S9srYOd8vEE', 'SgcDGsfHbuM', 'HFqal5AWXgU', 'Gq88VGoIF7I']
     return videoIdList[randint(0, len(videoIdList) - 1)]
@@ -17,12 +38,6 @@ def getRandomChannelID():
 def userActivityGenerate(startDate=''):
     videoList = select(DB_NAME, DB_TB_VIDEO, ['id', 'channelid', 'categoryid'],
                         ['useractivityflag'], [{'useractivityflag':'N'}])
-    topicRndSeedDict = {
-          TOPIC_USER_VIEW:20,
-          TOPIC_USER_LIKE:8,
-          TOPIC_USER_SHARE:8,
-          TOPIC_USER_COMMENT:6,
-          TOPIC_USER_SUBSCRIBE:6}
     count = 0
     batchNum = 100
     for video in videoList:

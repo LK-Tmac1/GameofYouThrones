@@ -20,7 +20,7 @@ def channel_search():
         keyword = 'youtube' if keyword == ''  else keyword
         Filter = str(urllib.urlencode({"q":keyword, 'type':'channel'}))
         channelJSON = getJSONData('search', Filter, part='snippet', maxResults=True)
-        channelDataList = parseSearchJSON(channelJSON)
+        channelDataList = parseSearchJSON(channelJSON, 'channelId')
         return render_template("channel.html", channelList=channelDataList)
     else:
         topn = int(request.form["topn"])
@@ -37,7 +37,7 @@ def channel_search():
         useractivity = useractivity[0:len('user')] + ' ' + useractivity[len('user') :len(useractivity)]
         Filter = str(urllib.urlencode({"channelId":channelId, 'type':'video'}))
         videoJSON = getJSONData('search', Filter, part='snippet', maxResults=True)
-        videoList = parseSearchJSON(videoJSON)[0:topn]
+        videoList = parseSearchJSON(videoJSON, 'videoId')[0:topn]
         videoDictList = jsonifyVideo(videoList=videoList, dataList=resultTuple[0])
         videoDictAccumList = jsonifyVideo(videoList=videoList, dataList=resultTuple[1])
         return render_template('channelvideo.html', channelTitle=channelTitle, useractivity=useractivity,

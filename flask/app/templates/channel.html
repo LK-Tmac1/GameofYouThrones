@@ -1,7 +1,7 @@
 {% extends "header.html" %} {% block channel %}
 
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-	<h1 class="page-header">Dashboard</h1>
+	<h1 class="page-header">Channel trends</h1>
 	<form role="form" method="post">
 		<div>
 			<input style="width: 300px;" name='channelkeyword' type="text"
@@ -13,9 +13,9 @@
 	<div class='useractivityfilter'>
 		<form role="form" method='post'>
 			<h2>Select a channel</h2>
-			<select style='width: 300' name='channelinfo'> {% for channel
-				in channelList%}
-				<option value={{channel.id.channelId+':'+channel.title  }}>{{ channel.title }}</option>
+			<select style='width: 300' name='channelinfo'> {% for
+				channel in channelList%}
+				<option value="{{channel.channelId+':'+channel.title  }}">{{ channel.title }}</option>
 				{% endfor %}
 			</select>
 			<div>

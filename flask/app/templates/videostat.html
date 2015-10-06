@@ -2,8 +2,8 @@
 
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	<h3 class="page-header">
-		Top {{ topn }} videos with the most {{ useractivity }} of channel <i>{{
-			channelTitle | safe }}</i> during last {{ daterange }} days
+		Trends of {{ useractivity }} of video <i> {{ videoTitle | safe }}
+		</i> during last {{ datetimerange }} {{ mode }}
 	</h3>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -19,7 +19,7 @@
 									text : "Daily statistics"
 								},
 								xAxis : {
-									categories : {{ dateRangeList | safe }}
+									categories : {{ datetimeRangeList | safe }}
 								},
 								yAxis : {
 									title : {
@@ -56,7 +56,7 @@
 									text : "Accumulative daily statistics"
 								},
 								xAxis : {
-									categories : {{ dateRangeList | safe }}
+									categories : {{ datetimeRangeList | safe }}
 								},
 								yAxis : {
 									title : {

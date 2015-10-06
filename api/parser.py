@@ -1,4 +1,4 @@
-from utility.helper import transformListToString, parseVIdByImageURL
+from utility.helper import transformListToString
 
 def parseChannelJSON(JSONData, categoryId='', channelList=None):
     if channelList is None:
@@ -22,14 +22,24 @@ def parseChannelJSON(JSONData, categoryId='', channelList=None):
             channelList.append(channelDict)
     return channelList
 
-def parseSearchJSON(JSONData):
+def is_ascii(mystring):
+    try:
+        mystring.decode('ascii')
+    except UnicodeDecodeError:
+        return False
+    else:
+        return True
+
+def parseSearchJSON(JSONData, idName):
     dataList = []
     # Return a list of channel key-value pair
     if "items" in JSONData:
         for item in JSONData["items"]:
             snippet = item["snippet"]
-            dataDict = {"id":item["id"], "title":snippet["title"].encode('utf-8')}
-            dataList.append(dataDict)
+            dataDict = {idName:item["id"][idName].encode('utf-8'),
+                        "title":snippet["title"].encode('utf-8')}
+            if is_ascii(dataDict['title']):
+                dataList.append(dataDict)
     return dataList
 
 def parseVideoJSON(JSONData, videoList=None):
@@ -63,38 +73,4 @@ def parseVideoJSON(JSONData, videoList=None):
             videoList.append(videoDict)
     print "videoList:", videoList
     return videoList
-
-def parsePlaylistJSON(JSONData, channelId, playlistList=None):
-    # Return a list of channel key-value pair
-    if JSONData is not None and "items" in JSONData:
-        for item in JSONData["items"]:
-            snippet = item["snippet"]
-            playlistDict = {
-            "id":item["id"], "title":snippet["title"],
-            "publishedat":snippet["publishedAt"],
-            "description":snippet["description"],
-            "channelid":channelId,
-            "videoid":parseVIdByImageURL(snippet["thumbnails"]["default"]["url"]),
-            'videoflag':'N'
-            }
-            if playlistDict['videoid'] != 'img':
-                playlistList.append(playlistDict)
-    return playlistList
-
-def parseVideoIdByActivityJSON(JSONData, VIdSet=None):
-    # Return a set of video id in the JSON data, if such id is not in the VIdSet yet
-    if VIdSet is None:
-        VIdSet = set([])
-    if JSONData is not None and "items" in JSONData:
-        for item in JSONData['items']:
-            if 'contentDetails' in item:
-                ID = ''
-                content = item["contentDetails"]
-                if 'upload' in content:
-                    ID = content["upload"]["videoId"]
-                elif 'like' in content:
-                    ID = content['like']['resourceId']['videoId']
-                if ID != '' and ID not in VIdSet:
-                    VIdSet.add(ID)
-    return VIdSet
 

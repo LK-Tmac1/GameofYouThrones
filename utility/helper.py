@@ -1,13 +1,16 @@
 
-from datetime import date, datetime, timedelta as td
+from datetime import date, datetime, time, timedelta as td
 from utility.constant import USER_ACTIVETY_MINUTE_UNIT
 from random import randint
-from datetime import timedelta
+
+def getTimestampNow():
+    strTimestamp = str(datetime.now()).replace(' ', 'T')
+    return strTimestamp[0:strTimestamp.rfind(".")] + "Z"
 
 def parseDateTimeMinute(timestamp):
     # Given a timestamp, "2015-9-15T12:00:02.0Z", parse it to a given unit level
     timestamp = str(timestamp)
-    if len(timestamp) < 11:
+    if len(timestamp) < 10:
         return ''
     timestamp = timestamp[0:timestamp.rfind(':')]
     minute = int(timestamp[timestamp.rfind(':') + 1: len(timestamp) + 1])
@@ -25,15 +28,16 @@ def parseDateString(dateStr):
     day = int(dateStr[dateStr.rfind('-') + 1:dateStr.find('T')])
     return date(year, month, day)
 
-def getDatetimeFromStartList(hourCount, startDatetime=None, ago=True):
+def getDatetimeFromStartList(count, startDatetime=None, ago=True):
+    dateTimeList = []
     if startDatetime is None:
-        startDatetime = datetime(year='2015', month='10', day='01')
-    print startDatetime
-    dateStr = parseDateString(startDatetime)
-    startDatetime = parseDateTimeMinute(startDatetime)
-    startDatetime = dateStr + startDatetime[startDatetime.rfind('T'):len(startDatetime)]
-    print startDatetime.timedelta(hours=12)
-
+        startDatetime = datetime.now()
+    for i in xrange(0, count):
+        diff = str(datetime.now() - td(minutes=USER_ACTIVETY_MINUTE_UNIT * i))
+        diff = parseDateTimeMinute(diff)
+        dateTimeList.append(diff[diff.find(' ') + 1:len(diff)])
+    return list(reversed(dateTimeList))
+        
 
 def getDateFromStart(startDateStr, offset, ago):
     startDate = parseDateString(startDateStr)
@@ -66,11 +70,6 @@ def transformListToString(strList):
             strList[i] = strList[i].encode('utf-8')
         return ','.join(strList)
     
-def getTimestampNow():
-    strTimestamp = str(datetime.now()).replace(' ', 'T')
-    return strTimestamp[0:strTimestamp.rfind(".")] + "Z"
-
-
 def generateRandomTimeStr(dateStr, count=1):
     timeList = []
     for i in xrange(0, count):

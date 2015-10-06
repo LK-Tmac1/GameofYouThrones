@@ -4,10 +4,11 @@ from app import app
 from api.client import getJSONData
 from api.parser import parseSearchJSON
 import urllib
-from hbase.query import scanVideoByChannel
-from utility.helper import getDateFromStart, getTimestampNow, getDateRangeList
-from kafkaingest.dataengineering import getRandomChannelID
-from utility.jsonData import jsonifyVideo
+from hbase.query import getVideoById
+from utility.helper import getDateFromStart, getTimestampNow, getDateRangeList, getDatetimeFromStartList
+from kafkaingest.dataengineering import getRandomVideoId, getRandomValueList
+from utility.constant import MODE_HOURLY
+from random import randint 
 
 @app.route('/video')
 def video_home():
@@ -21,35 +22,31 @@ def video_search():
         keyword = 'youtube' if keyword == ''  else keyword
         Filter = str(urllib.urlencode({"q":keyword, 'type':'video'}))
         videoJSON = getJSONData('search', Filter, part='snippet', maxResults=True)
-        videoDataList = parseSearchJSON(videoJSON)
+        videoDataList = parseSearchJSON(videoJSON, 'videoId')
         return render_template("video.html", videoList=videoDataList)
     else:
         videoInfo = request.form["videoinfo"]
-        for video in videoInfo:
-            print video
-        return render_template("video.html")
-        """
-        videoId = videoInfo[0:videoInfo.rfind(':')]
         videoTitle = videoInfo[videoInfo.rfind(':') + 1:len(videoInfo)]
         mode = request.form["mode"]
-        useractivity = request.form["activitytype"]
-        videoCount = request.form['videoinfo']
-        
-        startDate = "2015-10-04T00:00:00"  # getTimestampNow
-        endDate = str(getDateFromStart(str(startDate), int(request.form["daterange"]), True)) + 'T'
-        dateRangeList = getDateRangeList(startDate, endDate, offset=1)
-        resultTuple = scanVideoByChannel(channelid=getRandomChannelID, topn=request.form["topn"],
-                            useractivity=useractivity, mode=mode,
-                            dateRangeList=dateRangeList)
-        resultTuple = scanVideoByIds(topn=topn)
+        useractivity = str(request.form["activitytype"])
+        videoStatCount = int(request.form['datetimerange'])
+        datetimeRangeList = []
+        startDate = getTimestampNow()
+        if mode == '_hourly':
+            videoStatCount = videoStatCount * 2
+            datetimeRangeList = getDatetimeFromStartList(count=videoStatCount)
+        else:
+            endDate = getDateFromStart(startDateStr=startDate, offset=videoStatCount, ago=True)
+            datetimeRangeList = getDateRangeList(startDate, endDate, offset=1)
+        resultTuple = getVideoById(videoId=getRandomVideoId(), videoStatCount=videoStatCount, useractivity=useractivity, mode=mode)
+        resultTuple = getRandomValueList(count=int(videoStatCount), useractivity=useractivity, mode=mode)
+        videoDictList = [{'name':videoTitle, 'data':resultTuple[0]}]
+        videoDictAccumList = [{'name':videoTitle, 'data':resultTuple[1]}]
+        if mode == '_hourly':
+            mode = 'hours'
+        else:
+            mode = 'days'
         useractivity = useractivity[0:len('user')] + ' ' + useractivity[len('user') :len(useractivity)]
-        Filter = str(urllib.urlencode({"videoId":videoId, 'type':'video'}))
-        videoJSON = getJSONData('search', Filter, part='snippet', maxResults=True)
-        videoList = parseSearchJSON(videoJSON)[0:topn]
-        videoDictList = jsonifyVideo(videoList=videoList, dataList=resultTuple[0])
-        videoDictAccumList = jsonifyVideo(videoList=videoList, dataList=resultTuple[1])
-        return render_template('channelvideo.html', videoTitle=videoTitle, useractivity=useractivity,
-                        topn=request.form["topn"], daterange=request.form["daterange"], dateRangeList=dateRangeList,
-                        videoDictList=videoDictList, videoDictAccumList=videoDictAccumList)
-        """
-
+        return render_template('videostat.html', videoTitle=videoTitle, videoDictList=videoDictList,
+                               videoDictAccumList=videoDictAccumList, datetimeRangeList=datetimeRangeList,
+                               useractivity=useractivity, datetimerange=request.form['datetimerange'], mode=mode)
