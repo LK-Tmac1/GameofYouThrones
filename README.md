@@ -1,5 +1,8 @@
 # GameofYouThrones
 
+##About Insight Data Engineering program
+This program is a 7 weeks intensive project based training program that helps engineers to prepare their career as data engineers. More details can be found here: www.insightdataengineering.com
+
 ##Story
 Like many users, I often watch videos on YouTube, subscribe to some channels, and sometimes get subscription emails. It seems those channel owners can make money from not only ads, but also subscribers: http://bit.ly/1M8xzcD, http://bit.ly/1KWZYA4.
 
@@ -34,15 +37,24 @@ The biggest chanllenge in this project, is more than programming, i.e. how to us
 
 Since in NoSQL, there is no foreign key reference, what if we want to know the statictics of videos that belong to a given channel? 
 
--Solution: All rows are sorted automatically on HBase, and there is a function called "Scan" that could be used to return only a range of rows, say all rows begin with a prefix. Thus, by making the row key consisted of channelid_videoid, similar to the idea of "composite key", when we want to know all the videos assoicated with a channel, we could use the scan method to scan all rows begin that "channelid".
+-Solution: All rows are sorted automatically on HBase, and there is a function called "Scan" that could be used to return only a range of rows, say all rows begin with a prefix. Thus, by making the row key consisted of channelid_videoid, similar to the idea of "composite key", when we want to know all the videos assoicated with a channel, we could use the scan method to scan all rows begin that "channelid". The trade off is that there will be duplication of data, as now for each video, it will be duplicated twice.
+
+![Query](image/hbase-rows.jpg)
 
 2. HBase columns
 
 Compared to RDBMS, NoSQL is schema free. When the data size is scaling up, NoSQL will be like a wide table, while RDBMS will be a tall table. Also, HBase is a columnar database, making queries on columns lower latency than RDBMS.
 
-For instance, in my HBase, for each row, the predefined column families are the combination of user activity and statistics basis, say user view on daily or hourly basis, or user comment on daily but accumulative sum basis. The column member of each family will be the date or date time if hourly basis of that activity, and the value will be the number of activities happended on that date/time. As a result, when more user activities are transformed into the HBase, the table will grow horizontally. The benefit is that, when queries are issued
+Motivated by this benefit, in my HBase, for each row, the predefined column families are the combination of user activity and statistics basis, say user view on daily or hourly basis, or user comment on daily but accumulative sum basis. The column member of each family will be the date or date time if hourly basis of that activity, and the value will be the number of activities happended on that date/time. The trade off is that the accumulative sum needs to be precalculated, making the data transformation more complicated. (See Spark batch)
 
+![Query](image/hbase-columns.jpg)
 
+3. Spark batch
 
+To "denormalize" the table row key and "precalculate" the accumulative sum statistics, Spark batch transform the raw data of user activity by the word-count-like method, i.e. mapping data to key value pair, and then reducing, sorting and grouping by keys. The most complicated part was to reduce the complexity of the program. For instance, the hourly (or half-hourly) basis data will be calculated first, then the accumulative sum of each half-/hour, then the daily basis, and finally the daily accumulative sum of each day. By doing so, the amount of work could be optimized.
+ 
+![Query](image/spark-batch.jpg)
+
+##Conclusion
 
 
