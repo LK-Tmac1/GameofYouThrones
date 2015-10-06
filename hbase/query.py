@@ -1,8 +1,19 @@
-from hbdao import scanDataByRowPrefix
+from hbdao import scanDataByRowPrefix, getDataByRowKeys
 from utility.constant import HB_CHANNEL_PREFIX, HB_VIDEO_PREFIX
 from random import randint
 
-def queryVideoByChannel(channelid, topn, dateRangeList, useractivity, mode):
+def scanVideoByIds(idList=None, topn, useractivity, mode):
+    columnQualiferList = ['%s%s' % (useractivity, mode)]
+    columnQualiferAccumList = ['%s%s_accum' % (useractivity, mode)]
+    Filter = "ColumnPrefixFilter('2015-09-30T')"
+    if idList is None or len(idList) == 0:
+        rows = tuple(scanDataByRowPrefix(HB_VIDEO_PREFIX, columnQualiferList, Filter=Filter))
+        rowsAccum = tuple(scanDataByRowPrefix(HB_VIDEO_PREFIX, columnQualiferAccumList, Filter=Filter))
+    else:
+        rows = tuple(getDataByRowKeys(idList, columnQualiferList))
+        rowsAccum = tuple(getDataByRowKeys(idList, columnQualiferAccumList))
+
+def scanVideoByChannel(channelid, topn, dateRangeList, useractivity, mode):
     columnQualiferList = []
     columnQualiferAccumList = []
     columnQualifer = '%s%s' % (useractivity, mode)

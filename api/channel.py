@@ -1,7 +1,7 @@
 
 from client import getJSONData
 from utility.constant import  DB_NAME, DB_TB_CHANNEL, DB_TB_CATEGORY
-from api.parser import parseChannelJSON
+from api.parser import parseSearchJSON
 from mysql.mysqldao import insert, select, update
  
     
@@ -12,7 +12,7 @@ def saveChannelByCategory(categoryId):
     resource = "channels"
     data = getJSONData(resource, Filter, part, True)
     while data is not None:
-        channelList = parseChannelJSON(data, categoryId)
+        channelList = parseSearchJSON(data, categoryId)
         insert(DB_NAME, DB_TB_CHANNEL, channelList)
         if 'nextPageToken' in data:
             nextPageToken = data["nextPageToken"]

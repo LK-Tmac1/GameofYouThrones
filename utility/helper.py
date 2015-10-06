@@ -2,6 +2,7 @@
 from datetime import date, datetime, timedelta as td
 from utility.constant import USER_ACTIVETY_MINUTE_UNIT
 from random import randint
+from datetime import timedelta
 
 def parseDateTimeMinute(timestamp):
     # Given a timestamp, "2015-9-15T12:00:02.0Z", parse it to a given unit level
@@ -23,6 +24,16 @@ def parseDateString(dateStr):
     month = int(dateStr[dateStr.find('-') + 1:dateStr.rfind('-')])
     day = int(dateStr[dateStr.rfind('-') + 1:dateStr.find('T')])
     return date(year, month, day)
+
+def getDatetimeFromStartList(hourCount, startDatetime=None, ago=True):
+    if startDatetime is None:
+        startDatetime = datetime(year='2015', month='10', day='01')
+    print startDatetime
+    dateStr = parseDateString(startDatetime)
+    startDatetime = parseDateTimeMinute(startDatetime)
+    startDatetime = dateStr + startDatetime[startDatetime.rfind('T'):len(startDatetime)]
+    print startDatetime.timedelta(hours=12)
+
 
 def getDateFromStart(startDateStr, offset, ago):
     startDate = parseDateString(startDateStr)
@@ -47,10 +58,6 @@ def getDateRangeList(dateStr1, dateStr2, offset=7):
         i = i + offset   
     return dateList
 
-def parseVIdByImageURL(url):
-    url = url[0:url.rfind("/")]
-    url = url[url.rfind("/") + 1:len(url)]
-    return url
 
 def transformListToString(strList):
     # Returns a string that concatenates all objects in a list by comma

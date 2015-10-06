@@ -6,6 +6,10 @@ from kafkaingest.producer import userActivityRandom
 from kafkaingest.consumer import flush2Local
 from random import randint
 
+def getRandomVideoId():
+    videoIdList = ['kf85BiUmMk8', 'S9srYOd8vEE', 'SgcDGsfHbuM', 'HFqal5AWXgU', 'Gq88VGoIF7I']
+    return videoIdList[randint(0, len(videoIdList) - 1)]
+
 def getRandomChannelID():
     channelIdList = ['UCbEIp4Dn6qSepBpp7vWPUIQ', 'UCwwMcOpDNorLbDjhSaM8AZg', 'UCdMJU0WAzxaz8HUUmHtvL1w', 'h2gfaGp-lFjx5bBCtaw']
     return channelIdList[randint(0, len(channelIdList) - 1)]

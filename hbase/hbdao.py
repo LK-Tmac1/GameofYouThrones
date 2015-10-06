@@ -21,24 +21,16 @@ def putUseractivityStat(dataTupleList):
         print rowKey
 
 def getDataByRowKeys(rowKeys, columns):
-    rows = connection.table(HB_TB_MASTER).row(rowKeys, columns)
+    rows = connection.table(HB_TB_MASTER).rows(rowKeys, columns)
     return rows
 
-def scanDataByRowPrefix(prefix, columnFamilyMember=[]):
-    rows = connection.table(HB_TB_MASTER).scan(row_prefix=prefix, \
+def scanDataByRowPrefix(prefix, columnFamilyMember=[], Filter=None):
+    if Filter is not None:
+        return connection.table(HB_TB_MASTER).scan(row_prefix=prefix, \
+                columns=columnFamilyMember, filter=Filter, sorted_columns=True)
+    else:
+        return connection.table(HB_TB_MASTER).scan(row_prefix=prefix, \
                 columns=columnFamilyMember, sorted_columns=True)
-    return rows
         # each row is a tuple, where the first element is the row key
         # and the second is an OrderedDict/Tuple of column:value
         # Example: [('userview_hourly:2015-07-01T00:00', '4'), ('userview_hourly:2015-07-01T00:30', '8')...]
-
-"""
-category_video_2:R2JU2gIpWd0
-video_ulfxHtVF8bg
-category__video__22:eXvsVwEEp1o
-channel_UCgMpNBkUc7tTsk_gr06d17g
-rows = scanDataByRowPrefix('channel_', ['userview_daily'])
-rows = getDataByRowKeys('video_s6dR0WCFRmA', ['userview_daily'])
-"""
-
-

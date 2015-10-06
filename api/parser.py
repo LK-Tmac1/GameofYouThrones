@@ -22,12 +22,15 @@ def parseChannelJSON(JSONData, categoryId='', channelList=None):
             channelList.append(channelDict)
     return channelList
 
-def parseVideoJSONSearch(JSONData):
+def parseSearchJSON(JSONData):
     dataList = []
-    for item in JSONData['items']:
-        dataList.append(item['snippet']['title'].encode('utf-8'))
+    # Return a list of channel key-value pair
+    if "items" in JSONData:
+        for item in JSONData["items"]:
+            snippet = item["snippet"]
+            dataDict = {"id":item["id"], "title":snippet["title"].encode('utf-8')}
+            dataList.append(dataDict)
     return dataList
-    
 
 def parseVideoJSON(JSONData, videoList=None):
     print "JSONData:", JSONData
