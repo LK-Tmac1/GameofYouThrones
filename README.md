@@ -1,6 +1,6 @@
 # GameofYouThrones
 
-##About Insight Data Engineering program
+##About Insight
 This program is a 7 weeks intensive project based training program that helps engineers to prepare their career as data engineers. More details can be found here: www.insightdataengineering.com
 
 ##Story
@@ -57,4 +57,4 @@ To "denormalize" the table row key and "precalculate" the accumulative sum stati
 
 ##Conclusion
 
-
+There are many tools for big data, but an awesome data engineer should know which to be used to resolve the problem, why should be used, the trade off and like forth. Building a pipeline system is not easy, and thus challenging and exciting.
