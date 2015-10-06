@@ -21,6 +21,7 @@ Here are two more concrete questions, i.e. queries that could be answered by my 
 
 ![Query](image/query2-1.jpg)
 
+![Query](image/query2-2.jpg)
 
 ##Pipeline
 
@@ -33,7 +34,7 @@ One thing should be mentioned is that, although YouTube provides data of videos 
 ##Chanllenges
 The biggest chanllenge in this project, is more than programming, i.e. how to use some technologies, but instead, knowing which technology should be used to resolve a certain problem and why should we use, is more important. This was my first time of using NoSQL and HBase, so I would like to talk more about this.
 
-1. HBase rows
+#####HBase rows
 
 Since in NoSQL, there is no foreign key reference, what if we want to know the statictics of videos that belong to a given channel? 
 
@@ -41,7 +42,7 @@ Since in NoSQL, there is no foreign key reference, what if we want to know the s
 
 ![Query](image/hbase-rows.jpg)
 
-2. HBase columns
+#####HBase columns
 
 Compared to RDBMS, NoSQL is schema free. When the data size is scaling up, NoSQL will be like a wide table, while RDBMS will be a tall table. Also, HBase is a columnar database, making queries on columns lower latency than RDBMS.
 
@@ -49,7 +50,7 @@ Motivated by this benefit, in my HBase, for each row, the predefined column fami
 
 ![Query](image/hbase-columns.jpg)
 
-3. Spark batch
+#####Spark batch
 
 To "denormalize" the table row key and "precalculate" the accumulative sum statistics, Spark batch transform the raw data of user activity by the word-count-like method, i.e. mapping data to key value pair, and then reducing, sorting and grouping by keys. The most complicated part was to reduce the complexity of the program. For instance, the hourly (or half-hourly) basis data will be calculated first, then the accumulative sum of each half-/hour, then the daily basis, and finally the daily accumulative sum of each day. By doing so, the amount of work could be optimized.
  
