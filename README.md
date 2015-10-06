@@ -3,7 +3,19 @@
 ##Story
 Like many users, I often watch videos on YouTube, subscribe to some channels, and sometimes get subscription emails. It seems those channel owners can make money from not only ads, but also subscribers: http://bit.ly/1M8xzcD, http://bit.ly/1KWZYA4.
 
-So I was curious if there was a way that could help channel owners to know the popularity of their videos and channels by user activity on YouTube: there are 8000~ channels, 400~ millions videos, and 1~ billion users, so you can imagine how many user activities are there each day, and it will be technically challenging and analytically interesting.
+So I was curious if there was a way that could help channel owners to know the popularity of their videos and channels by user activity on YouTube: there are 8000~ channels, 400~ millions videos, and 1~ billion users, so you can imagine how many user activities are there each day, and this project was not only analytically interesting but also technically challenging.
+
+##Dashboard
+Here are two more concrete questions, i.e. queries that could be answered by my project:
+
+1. By a given time span, which are the top X videos of channel Y that had the most time of views from users?
+![Query](image/query1-1.jpg)
+
+![Query](image/query1-2.jpg)
+
+2. By a given time span, how many subscribers a given video X had driven for the channel it belonged to?
+![Query](image/query2-1.jpg)
+
 
 ##Pipeline
 
