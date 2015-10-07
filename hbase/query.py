@@ -2,6 +2,7 @@ from hbdao import scanDataByRowPrefix
 from utility.constant import HB_CHANNEL_PREFIX, HB_VIDEO_PREFIX, MODE_HOURLY
 from random import randint
 
+
 def parseVideoTuple(row, isAccum, videoStatCount):
     dataList = []
     items = row[1].items()
@@ -11,10 +12,10 @@ def parseVideoTuple(row, isAccum, videoStatCount):
         if isAccum and value == 0:
             value = dataList[i - 1]  
         dataList.append(value)
-    print dataList,'-------'
+    print dataList, '-------'
     return dataList
 
-def getVideoById(videoId, videoStatCount, useractivity, mode):
+def getVideoById(videoId, videoStatCount, useractivity, mode, flag=True):
     columnQualiferList = ['%s%s' % (useractivity, mode)]
     columnQualiferAccumList = ['%s%s_accum' % (useractivity, mode)]
     prefix = HB_VIDEO_PREFIX + videoId
@@ -24,7 +25,8 @@ def getVideoById(videoId, videoStatCount, useractivity, mode):
     return (parseVideoTuple(row=row, isAccum=False, videoStatCount=videoStatCount),
             parseVideoTuple(row=rowAccum, isAccum=True, videoStatCount=videoStatCount))
 
-def scanVideoByChannel(channelid, topn, dateRangeList, useractivity, mode):
+def scanVideoByChannel(channelid, topn, dateRangeList, useractivity, mode, flag=True):
+    print str(channelid), 'channelid'
     columnQualiferList = []
     columnQualiferAccumList = []
     columnQualifer = '%s%s' % (useractivity, mode)
@@ -35,6 +37,7 @@ def scanVideoByChannel(channelid, topn, dateRangeList, useractivity, mode):
     rows = tuple(scanDataByRowPrefix(HB_CHANNEL_PREFIX + HB_VIDEO_PREFIX , columnQualiferList))
     rowsAccum = tuple(scanDataByRowPrefix(HB_CHANNEL_PREFIX + HB_VIDEO_PREFIX, columnQualiferAccumList))
     rndIndex = randint(0, len(rowsAccum) - int(topn))
+    rndIndex = 37 
     topn = int(topn)
     return (parseHBaseTuple(rows[rndIndex:rndIndex + topn], False, dateRangeList),
             parseHBaseTuple(rowsAccum[rndIndex:rndIndex + topn], True, dateRangeList))

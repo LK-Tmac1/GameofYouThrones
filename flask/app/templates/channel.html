@@ -15,28 +15,28 @@
 			<h2>Select a channel</h2>
 			<select style='width: 300' name='channelinfo'> {% for
 				channel in channelList%}
-				<option value="{{channel.channelId+':'+channel.title  }}">{{ channel.title }}</option>
-				{% endfor %}
+				<option value="{{channel.channelId+':'+channel.title  }}">{{
+					channel.title }}</option> {% endfor %}
 			</select>
 			<div>
 				<h2 class="sub-header">User activity filter</h2>
-				<select name='activitytype'>
-					<option value='userview'>View</option>
-					<option value='userlike'>Like</option>
-					<option value='usercomment'>Comment</option>
-					<option value='usershare'>Share</option>
-					<option value='usersubscribe'>Subscribe</option>
-				</select> <select name='topn'>
-					<option value='3'>Top 3</option>
-					<option value='5'>Top 5</option>
-					<option value='10'>Top 10</option>
-				</select> <select name='daterange'>
+				<select name='daterange'>
 					<option value='3'>Last 3 days</option>
 					<option value='7'>Last 7 days</option>
 					<option value='15'>Last 15 days</option>
 					<option value='30'>Last 30 days</option>
 					<option value='60'>Last 60 days</option>
-				</select>
+				</select>&nbsp;&nbsp; <select name='topn'>
+					<option value='3'>Top 3</option>
+					<option value='5'>Top 5</option>
+					<option value='10'>Top 10</option>
+				</select> &nbsp;&nbsp;<select name='activitytype'>
+					<option value='userview'>View</option>
+					<option value='userlike'>Like</option>
+					<option value='usercomment'>Comment</option>
+					<option value='usershare'>Share</option>
+					<option value='usersubscribe'>Subscribe</option>
+				</select>&nbsp;&nbsp;
 				<button type="submit" value='submit'>Submit</button>
 			</div>
 		</form>

@@ -7,13 +7,10 @@ import urllib
 from hbase.query import getVideoById
 from utility.helper import getDateFromStart, getTimestampNow, getDateRangeList, getDatetimeFromStartList
 from kafkaingest.dataengineering import getRandomVideoId, getRandomValueList
-from utility.constant import MODE_HOURLY
-from random import randint 
 
 @app.route('/video')
 def video_home():
     return render_template("video.html", title='Video')
-
 
 @app.route('/video', methods=['POST'])
 def video_search():
@@ -43,6 +40,9 @@ def video_search():
         resultTuple = getRandomValueList(count=int(videoStatCount), useractivity=useractivity, mode=mode)
         videoDictList = [{'name':videoTitle, 'data':resultTuple[0]}]
         videoDictAccumList = [{'name':videoTitle, 'data':resultTuple[1]}]
+        # total = int(resultTuple[1][len(resultTuple[1] - 1)]) - int(resultTuple[1][0])
+        total = videoDictAccumList[0]['data']
+        total = total[len(total) - 1] - total[0]
         if mode == '_hourly':
             mode = 'hours'
         else:
@@ -50,4 +50,4 @@ def video_search():
         useractivity = useractivity[0:len('user')] + ' ' + useractivity[len('user') :len(useractivity)]
         return render_template('videostat.html', videoTitle=videoTitle, videoDictList=videoDictList,
                                videoDictAccumList=videoDictAccumList, datetimeRangeList=datetimeRangeList,
-                               useractivity=useractivity, datetimerange=request.form['datetimerange'], mode=mode)
+                               useractivity=useractivity, datetimerange=request.form['datetimerange'], mode=mode, total=total)

@@ -12,28 +12,28 @@
 	<div class='useractivityfilter'>
 		<form role="form" method='post'>
 			<h2>Select a video</h2>
-			<select style='width: 300' name='videoinfo'> {% for video
-				in videoList%}
+			<select style='width: 300' name='videoinfo'> {% for video in
+				videoList%}
 				<option value="{{ video.videoId +':'+video.title | safe  }}">{{
 					video.title }}</option> {% endfor %}
 			</select>
 			<div>
 				<h2 class="sub-header">User activity filter</h2>
-				<select name='activitytype'>
+				<select name='datetimerange'>
+					<option value='3'>Last 3</option>
+					<option value='5'>Last 5</option>
+					<option value='10'>Last 10</option>
+					<option value='24'>Last 24</option>
+				</select> &nbsp;&nbsp;<select name='mode'>
+					<option value='_hourly'>Hourly</option>
+					<option value='_daily'>Daily</option>
+				</select> &nbsp;&nbsp;<select name='activitytype'>
 					<option value='userview'>View</option>
 					<option value='userlike'>Like</option>
 					<option value='usercomment'>Comment</option>
 					<option value='usershare'>Share</option>
 					<option value='usersubscribe'>Subscribe</option>
-				</select> <select name='mode'>
-					<option value='_hourly'>Hourly</option>
-					<option value='_daily'>Daily</option>
-				</select> <select name='datetimerange'>
-					<option value='3'>Last 3</option>
-					<option value='5'>Last 5</option>
-					<option value='10'>Last 10</option>
-					<option value='24'>Last 24</option>
-				</select>
+				</select>&nbsp;&nbsp;
 				<button type="submit" value='submit'>Submit</button>
 			</div>
 		</form>

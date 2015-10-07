@@ -31,9 +31,11 @@ def channel_search():
         useractivity = request.form["activitytype"]
         endDate = str(getDateFromStart(str(startDate), int(request.form["daterange"]), True)) + 'T'
         dateRangeList = getDateRangeList(startDate, endDate, offset=1)
-        resultTuple = scanVideoByChannel(channelid=getRandomChannelID, topn=topn,
-                            useractivity=useractivity, mode='_daily',
-                            dateRangeList=dateRangeList)
+        
+        resultTuple = []
+        resultTuple = scanVideoByChannel(channelid=getRandomChannelID(), topn=topn,
+                                useractivity=useractivity, mode='_daily',
+                                dateRangeList=dateRangeList)
         useractivity = useractivity[0:len('user')] + ' ' + useractivity[len('user') :len(useractivity)]
         Filter = str(urllib.urlencode({"channelId":channelId, 'type':'video'}))
         videoJSON = getJSONData('search', Filter, part='snippet', maxResults=True)
@@ -44,7 +46,9 @@ def channel_search():
         for i in xrange(0, len(videoDictAccumList)):
             valueList = videoDictAccumList[i]['data']
             value = valueList[len(valueList) - 1] - valueList[0]
-            videoWeightList.append([videoDictAccumList[i]['name'], value])
+            name = videoDictAccumList[i]['name']
+            name = name[0:30] + '...' if len(name) > 31 else name
+            videoWeightList.append([name, value])
         return render_template('channelvideo.html', channelTitle=channelTitle, useractivity=useractivity,
                         topn=topn, daterange=request.form["daterange"], dateRangeList=dateRangeList,
                         videoDictList=videoDictList, videoDictAccumList=videoDictAccumList,
