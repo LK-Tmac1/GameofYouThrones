@@ -33,7 +33,7 @@ def getDatetimeFromStartList(count, startDatetime=None, ago=True):
     if startDatetime is None:
         startDatetime = datetime.now()
     for i in xrange(0, count):
-        diff = str(datetime.now() - td(minutes=USER_ACTIVETY_MINUTE_UNIT * i))
+        diff = str(datetime.now() - td(minutes=USER_ACTIVETY_MINUTE_UNIT * (i + 8)))
         diff = parseDateTimeMinute(diff)
         dateTimeList.append(diff[diff.find(' ') + 1:len(diff)])
     return list(reversed(dateTimeList))

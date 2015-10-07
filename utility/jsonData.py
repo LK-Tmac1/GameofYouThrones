@@ -7,7 +7,7 @@ def jsonifyVideo(videoList, dataList):
     dataDictList = []
     for i in xrange(0, len(videoList)):
         dataDict = {}
-        dataDict['name'] = str(videoList[i]['title']).replace("'", "")
+        dataDict['name'] = str(videoList[i]['title']).replace('"', "")
         dataDict['data'] = dataList[i]
         dataDictList.append(dataDict)
     return dataDictList

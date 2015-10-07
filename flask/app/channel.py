@@ -40,6 +40,12 @@ def channel_search():
         videoList = parseSearchJSON(videoJSON, 'videoId')[0:topn]
         videoDictList = jsonifyVideo(videoList=videoList, dataList=resultTuple[0])
         videoDictAccumList = jsonifyVideo(videoList=videoList, dataList=resultTuple[1])
+        videoWeightList = []
+        for i in xrange(0, len(videoDictAccumList)):
+            valueList = videoDictAccumList[i]['data']
+            value = valueList[len(valueList) - 1] - valueList[0]
+            videoWeightList.append([videoDictAccumList[i]['name'], value])
         return render_template('channelvideo.html', channelTitle=channelTitle, useractivity=useractivity,
                         topn=topn, daterange=request.form["daterange"], dateRangeList=dateRangeList,
-                        videoDictList=videoDictList, videoDictAccumList=videoDictAccumList)
+                        videoDictList=videoDictList, videoDictAccumList=videoDictAccumList,
+                        videoWeightList=videoWeightList)

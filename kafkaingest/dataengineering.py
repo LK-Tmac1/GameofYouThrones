@@ -7,11 +7,11 @@ from kafkaingest.consumer import flush2Local
 from random import randint
 
 topicRndSeedDict = {
-          TOPIC_USER_VIEW:20,
-          TOPIC_USER_LIKE:8,
-          TOPIC_USER_SHARE:8,
-          TOPIC_USER_COMMENT:6,
-          TOPIC_USER_SUBSCRIBE:2}
+          TOPIC_USER_VIEW:15,
+          TOPIC_USER_LIKE:5,
+          TOPIC_USER_SHARE:5,
+          TOPIC_USER_COMMENT:3,
+          TOPIC_USER_SUBSCRIBE: 2}
 
 def getRandomValueList(count, useractivity, mode):
     value = topicRndSeedDict[useractivity]

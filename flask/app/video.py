@@ -25,7 +25,8 @@ def video_search():
         videoDataList = parseSearchJSON(videoJSON, 'videoId')
         return render_template("video.html", videoList=videoDataList)
     else:
-        videoInfo = request.form["videoinfo"]
+        videoInfo = request.form.getlist("videoinfo")
+        videoInfo = videoInfo[0]
         videoTitle = videoInfo[videoInfo.rfind(':') + 1:len(videoInfo)]
         mode = request.form["mode"]
         useractivity = str(request.form["activitytype"])
