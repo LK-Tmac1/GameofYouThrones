@@ -1,11 +1,15 @@
 {% extends "header.html" %} {% block channel %}
 
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	<h3 class="page-header">
+		Trends of {{ useractivity }} of video <i> {{ videoTitle | safe }}
+		</i> during last {{ datetimerange }} {{ mode }}
+	</h3>
+	<h1>{{ total }} in total</h1>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			showChart();
 			showChartAccum();
-			showPieAccum();
 		});
 		
 		function showChart() {
@@ -16,7 +20,7 @@
 									text : "Daily statistics"
 								},
 								xAxis : {
-									categories : {{ dateRangeList | safe }}
+									categories : {{ datetimeRangeList | safe }}
 								},
 								yAxis : {
 									title : {
@@ -53,7 +57,7 @@
 									text : "Accumulative daily statistics"
 								},
 								xAxis : {
-									categories : {{ dateRangeList | safe }}
+									categories : {{ datetimeRangeList | safe }}
 								},
 								yAxis : {
 									title : {
@@ -81,42 +85,12 @@
 								         ]        
 							});
 		}
-		
-		function showPieAccum(){
-		    $('#containerPieAccum').highcharts({
-		        chart: {
-		            type: 'pie',
-		            options3d: {
-		                enabled: true,
-		                alpha: 45
-		            }
-		        },
-		        title: {
-		            text: "Top {{ topn }} videos with the most {{ useractivity }} of channel <i>{{ channelTitle | safe }}</i> during last {{ daterange }} days"
-		        },
-		        plotOptions: {
-		            pie: {
-		                innerSize: 100,
-		                depth: 45
-		            }
-		        },
-		        series: [{
-		            name: 'Video weight',
-		            data: {{ videoWeightList | safe }}
-		        }]
-		    });
-		}
 	</script>
-	<div id="containerPieAccum"
-		style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-
-	<br>
 	<div id="container"
 		style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 	<br>
 	<div id="containerAccum"
 		style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-
 
 </div>
 </div>

@@ -21,7 +21,6 @@ Here are two more concrete questions, i.e. queries that could be answered by my 
 
 ![Query](image/query2-1.jpg)
 
-![Query](image/query2-2.jpg)
 
 ##Pipeline
 
