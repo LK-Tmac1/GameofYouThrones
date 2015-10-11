@@ -6,7 +6,7 @@ This program is a 7 weeks intensive project based training program that helps en
 ##Story
 Like many users, I often watch videos on YouTube, subscribe to some channels, and sometimes get subscription emails. It seems those channel owners can make money from not only ads, but also subscribers: http://bit.ly/1M8xzcD, http://bit.ly/1KWZYA4.
 
-So I was curious if there was a way that could help channel owners to know the popularity of their videos and channels by user activity on YouTube: there are 8000~ channels, 400~ millions videos, and 1~ billion users, so you can imagine how many user activities are there each day, and this project was not only analytically interesting but also technically challenging.
+So my project's goal was to build an analytical tool that could help channel owners to know the trends of their videos and channels based on user activities. There are 8000~ channels, 400~ millions videos, 1~ billion users, and unknown numbers of user activities each day. Thus, for me, this project was not only analytically interesting but also technically challenging.
 
 ##Dashboard
 Here are two more concrete questions, i.e. queries that could be answered by my project:
@@ -31,7 +31,7 @@ The data of user activity from YouTube will be classified by Kafka, a distribute
 One thing should be mentioned is that, although YouTube provides data of videos and channels by their API, user activity is private. So I had to generate such data by myself, and the size is roughly 100~200 GB level.
 
 ##Chanllenges
-The biggest chanllenge in this project, is more than programming, i.e. how to use some technologies, but instead, knowing which technology should be used to resolve a certain problem and why should we use, is more important. This was my first time of using NoSQL and HBase, so I would like to talk more about this.
+The biggest chanllenge in this project, was to learn how to use those open source technologies. For instance, HBase and NoSQL design.
 
 ####HBase rows
 
@@ -51,7 +51,7 @@ Motivated by this benefit, in my HBase, for each row, the predefined column fami
 
 ####Spark batch
 
-To "denormalize" the table row key and "precalculate" the accumulative sum statistics, Spark batch transform the raw data of user activity by the word-count-like method, i.e. mapping data to key value pair, and then reducing, sorting and grouping by keys. The most complicated part was to reduce the complexity of the program. For instance, the hourly (or half-hourly) basis data will be calculated first, then the accumulative sum of each half-/hour, then the daily basis, and finally the daily accumulative sum of each day. By doing so, the amount of work could be optimized.
+To denormalize the table row key and precalculate the accumulative sum statistics, Spark batch transform the raw data of user activity by the word-count-like method, i.e. mapping data to key value pair, and then reducing, sorting and grouping by keys. The most complicated part was to reduce the complexity of the program. For instance, the hourly (or half-hourly) basis data will be calculated first, then the accumulative sum of each half-/hour, then the daily basis, and finally the daily accumulative sum of each day. By doing so, the amount of work could be optimized.
  
 ![Query](image/spark-batch.jpg)
 
