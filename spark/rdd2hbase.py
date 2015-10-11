@@ -40,14 +40,7 @@ def putToHBaseBatch(filePath):
     hourlyAccuRDD = getHourlyAccuSumRDD(hourlyRDD)
     dailyRDD = getDailyRDD(hourlyRDD)
     dailyAccuRDD = getDailyAccuSumRDD(hourlyAccuRDD)
-    print "Saving---------"
     putToHBase(MODE_HOURLY, hourlyRDD)
     putToHBase(MODE_HOURLY_ACCU, hourlyAccuRDD)
     putToHBase(MODE_DAILY, dailyRDD)
     putToHBase(MODE_DAILY_ACCU, dailyAccuRDD)
-    print "Done====="
-    
-
-# filePath = '/Users/Kun/Git/GameofYouThrones/spark/sample/input.txt'
-# filePath = '/home/ubuntu/project/sample.txt'
-putToHBaseBatch(HDFS_MASTER_DNS + HDFS_DEFAULT_PATH + '/sample.txt')
