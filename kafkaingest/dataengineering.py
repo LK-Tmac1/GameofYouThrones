@@ -33,8 +33,7 @@ def getRandomVideoId():
 
 def getRandomChannelID():
     channelIdList = ['UCbEIp4Dn6qSepBpp7vWPUIQ', 'UCwwMcOpDNorLbDjhSaM8AZg', 'UCdMJU0WAzxaz8HUUmHtvL1w', 'h2gfaGp-lFjx5bBCtaw']
-    #return channelIdList[randint(0, len(channelIdList) - 1)]
-    return 'h2gfaGp-lFjx5bBCtaw'
+    return channelIdList[randint(0, len(channelIdList) - 1)]
 
 def userActivityGenerate(startDate=''):
     videoList = select(DB_NAME, DB_TB_VIDEO, ['id', 'channelid', 'categoryid'],
