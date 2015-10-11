@@ -1,6 +1,5 @@
 from pyspark.context import SparkContext, SparkConf
-from transform import transformActivity, transformHourlyToDailyKey, \
-        calculateAccuSum, parseTempKeyValueForAccu
+from transform import transformActivity, transformHourlyToDailyKey, calculateAccuSum, parseTempKeyValueForAccu
 
 conf = SparkConf().setAppName("masterBatch")
 sc = SparkContext(conf=conf)
