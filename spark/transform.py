@@ -42,13 +42,9 @@ def transformActivity(line, hourly=False):
         channelId = HB_CHANNEL_PREFIX + itemList[2]
         videoId = HB_VIDEO_PREFIX + itemList[3]
         useractivity = itemList[4]
-        categoryVideoId = '%s%s%s:%s' % (HB_CATEGORY_PREFIX, HB_VIDEO_PREFIX, itemList[1], itemList[3])
         channelVideoId = '%s%s%s:%s' % (HB_CHANNEL_PREFIX, HB_VIDEO_PREFIX, itemList[2], itemList[3])
-        categoryChannelId = '%s%s%s:%s' % (HB_CATEGORY_PREFIX, HB_CHANNEL_PREFIX, itemList[1], itemList[2])
         prefix_suffix = useractivity + ':%s:' + timestamp
         videoRow = prefix_suffix % videoId
         channelRow = prefix_suffix % channelId
-        categoryVideoRow = prefix_suffix % categoryVideoId
-        categoryChannelRow = prefix_suffix % categoryChannelId
         channelVideoRow = prefix_suffix % channelVideoId
-        return [videoRow , channelRow, categoryVideoRow, categoryChannelRow, channelVideoRow]
+        return [videoRow , channelRow, channelVideoRow]
