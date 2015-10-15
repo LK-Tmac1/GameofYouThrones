@@ -18,7 +18,6 @@ def putUseractivityStat(dataTupleList):
         for data in dataTuple[1]:
             dataDict[data[0]] = data[1]
         table.put(rowKey, dataDict)
-        print rowKey
 
 def getDataByRowKeys(rowKeys, columns):
     rows = connection.table(HB_TB_MASTER).rows(rowKeys, columns)
