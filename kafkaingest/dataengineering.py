@@ -2,7 +2,6 @@ from mysql.mysqldao import select, update
 from utility.constant import DB_TB_VIDEO, DB_NAME, TOPIC_USER_VIEW, \
     TOPIC_USER_LIKE, TOPIC_USER_SHARE, TOPIC_USER_SUBSCRIBE, TOPIC_USER_COMMENT
 from utility.helper import getTimestampNow, getDateRangeList, generateRandomTimeStr
-from kafkaingest.producer import userActivityRandom
 from kafkaingest.consumer import flush2Local
 from random import randint
 
@@ -12,6 +11,17 @@ topicRndSeedDict = {
           TOPIC_USER_SHARE:5,
           TOPIC_USER_COMMENT:3,
           TOPIC_USER_SUBSCRIBE: 2}
+
+def userActivityRandom(topic, vid='', cid='', caid='', dateStr=''):
+    dataList = []
+    # Sample output: 2015-09-30T16:40:00Z category channel video userview
+    dataList.append(dateStr if dateStr != '' else getTimestampNow())
+    dataList.append(caid if caid != '' else 'ca_rnd' + str(randint(1, 20)))
+    dataList.append(cid if cid != '' else 'ch_rnd' + str(randint(1, 10000)))
+    dataList.append(vid if vid != '' else 'v_rnd' + str(randint(1, 100000)))
+    dataList.append(topic)
+    return ' '.join(dataList) + '\n'
+
 
 def getRandomValueList(count, useractivity, mode):
     value = topicRndSeedDict[useractivity]
@@ -33,8 +43,7 @@ def getRandomVideoId():
 
 def getRandomChannelID():
     channelIdList = ['UCbEIp4Dn6qSepBpp7vWPUIQ', 'UCwwMcOpDNorLbDjhSaM8AZg', 'UCdMJU0WAzxaz8HUUmHtvL1w', 'h2gfaGp-lFjx5bBCtaw']
-    #return channelIdList[randint(0, len(channelIdList) - 1)]
-    return 'h2gfaGp-lFjx5bBCtaw'
+    return channelIdList[randint(0, len(channelIdList) - 1)]
 
 def userActivityGenerate(startDate=''):
     videoList = select(DB_NAME, DB_TB_VIDEO, ['id', 'channelid', 'categoryid'],
@@ -58,5 +67,3 @@ def userActivityGenerate(startDate=''):
             break
             batchNum = batchNum + 1
             count = 0
-            
-# userActivityGenerate()            

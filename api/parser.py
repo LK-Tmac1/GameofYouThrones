@@ -1,5 +1,20 @@
 from utility.helper import transformListToString
 
+def parseVideoIdByActivityJSON(JSONData, VIdSet=set([])):
+    # Return a set of video id in the JSON data, if such id is not in the VIdSet yet
+    if JSONData is not None and "items" in JSONData:
+        for item in JSONData['items']:
+            if 'contentDetails' in item:
+                ID = ''
+                content = item["contentDetails"]
+                if 'upload' in content:
+                    ID = content["upload"]["videoId"]
+                elif 'like' in content:
+                    ID = content['like']['resourceId']['videoId']
+                if ID != '' and ID not in VIdSet:
+                    VIdSet.add(ID)
+    return VIdSet
+
 def parseChannelJSON(JSONData, categoryId='', channelList=None):
     if channelList is None:
         channelList = []

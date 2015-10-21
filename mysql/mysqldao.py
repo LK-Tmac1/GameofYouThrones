@@ -28,7 +28,7 @@ def column_names(dbname, tbname):
 		cur = con.cursor()
 		cur.execute(query)
 	column_list = []
-	for i in range(cur.rowcount):
+	for i in xrange(cur.rowcount):
 		column_list.append(cur.fetchone())
 	return column_list
 
@@ -214,9 +214,8 @@ def select_unique_column(dbname, tbname, columnname):
 	tup = select(dbname, tbname, columnname_list, None, None)
 	if isinstance(tup, list):
 		column_value_list = []
-		for i in range(0, len(tup)):
+		for i in xrange(0, len(tup)):
 			column_value_list.append(tup[i][0])
 		return column_value_list
 	else:
 		return []
-		

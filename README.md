@@ -26,7 +26,7 @@ Here are two more concrete questions, i.e. queries that could be answered by my 
 
 ![Pipeline](image/pipeline.jpg)
 
-The data of user activity from YouTube will be classified by Kafka, a distributed messenger, based on different types of user activties, say a user viewed a video on a channel, or a user subscribed to a channel from a video. The message will then be stored on HDFS, then transformed by Spark, and denormalized into HBase as a NoSQL schema. Finally, the Flask web framework will handle the front end query jobs. All those were deployed on AWS EC2 instances, with one master node, and three worker nodes.
+The data of user activity from YouTube will be classified by Kafka, a distributed messenger, based on different types of user activties, say a user viewed a video on a channel, or a user subscribed to a channel from a video. The message will then be transformed by Spark, and denormalized into HBase as a NoSQL schema. Finally, the Flask web framework will handle the front end query jobs. All those were deployed on AWS EC2 instances, with one master node, and three worker nodes.
 
 One thing should be mentioned is that, although YouTube provides data of videos and channels by their API, user activity is private. So I had to generate such data by myself, and the size is roughly 100~200 GB level.
 

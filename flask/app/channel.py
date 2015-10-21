@@ -7,7 +7,19 @@ import urllib
 from hbase.query import scanVideoByChannel
 from utility.helper import getDateFromStart, getTimestampNow, getDateRangeList
 from kafkaingest.dataengineering import getRandomChannelID
-from utility.jsonData import jsonifyVideo
+
+def jsonifyVideo(videoList, dataList):
+    # assume video list and data list is in the same length 
+    for i in xrange(0, len(dataList)):
+        for j in xrange(0, len(dataList[i])):
+            dataList[i][j] = int(dataList[i][j])
+    dataDictList = []
+    for i in xrange(0, len(videoList)):
+        dataDict = {}
+        dataDict['name'] = str(videoList[i]['title']).replace('"', "")
+        dataDict['data'] = dataList[i]
+        dataDictList.append(dataDict)
+    return dataDictList
 
 @app.route('/channel')
 def channel():

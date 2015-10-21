@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 from client import getJSONData
 from mysql.mysqldao import update, execute_query, select, insert
 from utility.constant import DB_TB_VIDEO, DB_NAME, DB_TB_CHANNEL, DATE_OFFSET, MAX_RESULT
