@@ -39,9 +39,7 @@ def putToHBaseBatch(filePath):
     hourlyAccuRDD = getHourlyAccuSumRDD(hourlyRDD)
     dailyRDD = getDailyRDD(hourlyRDD)
     dailyAccuRDD = getDailyAccuSumRDD(hourlyAccuRDD)
-    print "Saving---------"
     putToHBase(MODE_HOURLY, hourlyRDD)
     putToHBase(MODE_HOURLY_ACCU, hourlyAccuRDD)
     putToHBase(MODE_DAILY, dailyRDD)
     putToHBase(MODE_DAILY_ACCU, dailyAccuRDD)
-    print "Done====="
