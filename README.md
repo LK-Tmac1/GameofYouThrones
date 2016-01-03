@@ -47,7 +47,7 @@ Motivated by this benefit, in my HBase, for each row, the predefined column fami
 
 Since in NoSQL, there is no foreign key reference, what if we want to know the statictics of videos that belong to a given channel? 
 
--Solution: All rows are sorted automatically on HBase, and there is a function called "Scan" that could be used to return only a range of rows, say all rows begin with a prefix. Thus, by making the row key consisted of channelid_videoid, similar to the idea of "composite key", when we want to know all the videos assoicated with a channel, we could use the scan method to scan all rows begin that "channelid". The trade off is that there will be duplication of data, as now for each video, it will be duplicated twice.
+Solution: All rows are sorted automatically on HBase, and there is a function called "Scan" that could be used to return only a range of rows, say all rows begin with a prefix. Thus, by making the row key consisted of channelid_videoid, similar to the idea of "composite key", when we want to know all the videos assoicated with a channel, we could use the scan method to scan all rows begin that "channelid". The trade off is that there will be duplication of data, as now for each video, it will be duplicated twice.
 
 ![Query](image/hbase-rows.jpg)
 
